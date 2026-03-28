@@ -601,7 +601,8 @@ function startClip(key) {
   return new Promise(resolve => {
     const clip = CLIPS[key];
     if (!clip) { resolve(); return; }
-    player.src = clip.file;
+    // Use embedded base64 audio if available, fall back to file path
+    player.src = (window.__AUDIO_B64 && window.__AUDIO_B64[key]) || clip.file;
     player.onended = resolve;
     player.onerror = resolve;
     player.play().catch(() => {
