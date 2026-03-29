@@ -625,7 +625,7 @@ function startClip(key) {
   return new Promise(resolve => {
     const clip = CLIPS[key];
     if (!clip) { resolve(); return; }
-    player.src = clip.file;
+    player.src = (window.__AUDIO_B64 && window.__AUDIO_B64[key]) || clip.file;
     player.onended = resolve;
     player.onerror = resolve;
     player.play().catch(() => { setTimeout(resolve, clip.dur); });
@@ -772,7 +772,7 @@ async function runDemo() {
 // ── Controls ──
 function dismissStart() {
   const splash = document.getElementById('splash');
-  player.src = CLIPS.intro.file;
+  player.src = (window.__AUDIO_B64 && window.__AUDIO_B64['intro']) || CLIPS.intro.file;
   player.play().then(() => {
     player.pause();
     player.currentTime = 0;
