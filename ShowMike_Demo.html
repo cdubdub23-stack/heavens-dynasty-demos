@@ -1119,7 +1119,7 @@ function startClip(key) {
   return new Promise((resolve) => {
     const clip = CLIPS[key];
     if (!clip) { resolve(); return; }
-    player.src = clip.file;
+    player.src = (window.__AUDIO_B64 && window.__AUDIO_B64[key]) || clip.file;
     player.onended = resolve;
     player.onerror = resolve;
     player.play().catch(resolve);
@@ -1444,7 +1444,7 @@ function dismissStart() {
   screen.style.transition = 'opacity 0.5s ease';
   setTimeout(() => { screen.style.display = 'none'; }, 500);
   // Unlock audio context with a silent play
-  player.src = CLIPS.intro.file;
+  player.src = (window.__AUDIO_B64 && window.__AUDIO_B64['intro']) || CLIPS.intro.file;
   player.play().then(() => {
     player.pause();
     player.currentTime = 0;
