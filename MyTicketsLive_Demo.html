@@ -601,13 +601,13 @@ function startClip(key) {
   return new Promise(resolve => {
     const clip = CLIPS[key];
     if (!clip) { resolve(); return; }
-    // Use embedded base64 audio if available, fall back to file path
+    player.onended = null;
+    player.onerror = null;
     player.src = (window.__AUDIO_B64 && window.__AUDIO_B64[key]) || clip.file;
+    player.load();
     player.onended = resolve;
-    player.onerror = resolve;
-    player.play().catch(() => {
-      setTimeout(resolve, clip.dur);
-    });
+    player.onerror = () => { setTimeout(resolve, clip.dur); };
+    player.play().catch(() => { setTimeout(resolve, clip.dur); });
   });
 }
 

@@ -550,12 +550,13 @@ function startClip(key) {
   return new Promise(resolve => {
     const clip = CLIPS[key];
     if (!clip) { resolve(); return; }
+    player.onended = null;
+    player.onerror = null;
     player.src = (window.__AUDIO_B64 && window.__AUDIO_B64[key]) || clip.file;
+    player.load();
     player.onended = resolve;
-    player.onerror = resolve;
-    player.play().catch(() => {
-      setTimeout(resolve, clip.dur);
-    });
+    player.onerror = () => { setTimeout(resolve, clip.dur); };
+    player.play().catch(() => { setTimeout(resolve, clip.dur); });
   });
 }
 
@@ -730,17 +731,24 @@ async function runDemo() {
 // ── Controls ──
 function dismissStart() {
   const splash = document.getElementById('splash');
-  // Unlock audio context
   player.src = (window.__AUDIO_B64 && window.__AUDIO_B64['intro']) || CLIPS.intro.file;
-  player.play().then(() => {
-    player.pause();
-    player.currentTime = 0;
+  player.load();
+  var unlockPromise = player.play();
+  if (unlockPromise) {
+    unlockPromise.then(() => {
+      player.pause();
+      player.currentTime = 0;
+      splash.classList.add('hidden');
+      setTimeout(() => runDemo(), 500);
+    }).catch(() => {
+      try { var ctx = new (window.AudioContext || window.webkitAudioContext)(); ctx.resume(); } catch(e) {}
+      splash.classList.add('hidden');
+      setTimeout(() => runDemo(), 500);
+    });
+  } else {
     splash.classList.add('hidden');
-    setTimeout(() => runDemo(), 300);
-  }).catch(() => {
-    splash.classList.add('hidden');
-    setTimeout(() => runDemo(), 300);
-  });
+    setTimeout(() => runDemo(), 500);
+  }
 }
 
 function togglePausePlay() { togglePause(); }

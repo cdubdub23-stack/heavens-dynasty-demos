@@ -1119,10 +1119,14 @@ function startClip(key) {
   return new Promise((resolve) => {
     const clip = CLIPS[key];
     if (!clip) { resolve(); return; }
+    var durMs = clip.dur < 1000 ? clip.dur * 1000 : clip.dur;
+    player.onended = null;
+    player.onerror = null;
     player.src = (window.__AUDIO_B64 && window.__AUDIO_B64[key]) || clip.file;
+    player.load();
     player.onended = resolve;
-    player.onerror = resolve;
-    player.play().catch(resolve);
+    player.onerror = () => { setTimeout(resolve, durMs); };
+    player.play().catch(() => { setTimeout(resolve, durMs); });
   });
 }
 
@@ -1445,14 +1449,20 @@ function dismissStart() {
   setTimeout(() => { screen.style.display = 'none'; }, 500);
   // Unlock audio context with a silent play
   player.src = (window.__AUDIO_B64 && window.__AUDIO_B64['intro']) || CLIPS.intro.file;
-  player.play().then(() => {
-    player.pause();
-    player.currentTime = 0;
-    setTimeout(() => runDemo(), 300);
-  }).catch(() => {
-    // Fallback — start anyway without audio
-    setTimeout(() => runDemo(), 300);
-  });
+  player.load();
+  var unlockPromise = player.play();
+  if (unlockPromise) {
+    unlockPromise.then(() => {
+      player.pause();
+      player.currentTime = 0;
+      setTimeout(() => runDemo(), 500);
+    }).catch(() => {
+      try { var ctx = new (window.AudioContext || window.webkitAudioContext)(); ctx.resume(); } catch(e) {}
+      setTimeout(() => runDemo(), 500);
+    });
+  } else {
+    setTimeout(() => runDemo(), 500);
+  }
 }
 </script>
 </body>
