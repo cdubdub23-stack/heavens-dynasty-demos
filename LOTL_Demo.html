@@ -363,39 +363,6 @@ window.__AUDIO_B64 = {
 </head>
 <body>
 
-<style>
-#passcode-gate{position:fixed;inset:0;z-index:99999;background:#080a07;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Inter',system-ui,sans-serif}
-#passcode-gate h2{color:#f59e0b;font-size:1.4rem;margin-bottom:1.2rem;letter-spacing:0.15em;text-transform:uppercase}
-#passcode-gate input{background:#151210;border:1px solid #2a2520;color:#faf5ef;padding:12px 20px;font-size:1rem;border-radius:8px;text-align:center;width:260px;outline:none}
-#passcode-gate input:focus{border-color:#f59e0b}
-#passcode-gate .hint{color:#6b5e4f;font-size:0.75rem;margin-top:0.8rem}
-#passcode-gate.wrong input{border-color:#ef4444;animation:shake 0.4s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-</style>
-<div id="passcode-gate">
-  <h2>Love on the Lawn</h2>
-  <input type="password" id="gate-input" placeholder="Enter access code" autofocus>
-  <div class="hint">Authorized viewers only</div>
-</div>
-<script>
-(function(){
-  if(sessionStorage.getItem('hd_access')==='granted'){
-    document.getElementById('passcode-gate').remove();return;
-  }
-  var g=document.getElementById('passcode-gate'),inp=document.getElementById('gate-input');
-  inp.addEventListener('keydown',function(e){
-    if(e.key==='Enter'){
-      if(inp.value==='HeavensDynasty2026'){
-        sessionStorage.setItem('hd_access','granted');g.remove();
-      }else{
-        g.classList.add('wrong');inp.value='';
-        setTimeout(function(){g.classList.remove('wrong')},500);
-      }
-    }
-  });
-})();
-</script>
-
 <!-- ─── AMBIENT ─── -->
 <div id="ambient"></div>
 <canvas id="particles-canvas"></canvas>
