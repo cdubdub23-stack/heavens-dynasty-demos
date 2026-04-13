@@ -341,8 +341,24 @@
 
   audio { display: none; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 <body>
+<!-- ═══ NEW SYSTEM ENHANCEMENTS ═══ -->
+<div id="subtitle-bar" style="display:none;position:fixed;bottom:60px;left:50%;transform:translateX(-50%);z-index:950;max-width:700px;width:90%;text-align:center;pointer-events:none">
+  <div id="subtitle-text" style="display:inline-block;background:rgba(0,0,0,0.75);color:#fff;font-size:0.85rem;line-height:1.6;padding:8px 20px;border-radius:8px;backdrop-filter:blur(8px)"></div>
+</div>
+<div id="seek-wrap" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:950;width:320px;display:none;align-items:center;gap:8px">
+  <span id="seek-time" style="font-size:0.5rem;color:rgba(255,255,255,0.4);font-family:monospace;min-width:36px">0:00</span>
+  <div id="seek-track" style="flex:1;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;cursor:pointer;position:relative" onclick="seekAudio(event)">
+    <div id="seek-fill" style="height:100%;background:currentColor;border-radius:2px;width:0;transition:width 0.1s linear;color:var(--accent,var(--gold,#d4a853))"></div>
+  </div>
+  <span id="seek-dur" style="font-size:0.5rem;color:rgba(255,255,255,0.4);font-family:monospace;min-width:36px;text-align:right">0:00</span>
+  <button id="vol-btn" onclick="toggleMute()" style="background:none;border:none;color:var(--accent,var(--gold,#d4a853));font-size:0.85rem;cursor:pointer;padding:2px 4px" title="Mute">&#128266;</button>
+  <button id="cc-btn" onclick="toggleCC()" style="background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.3);font-size:0.5rem;cursor:pointer;padding:2px 5px;border-radius:3px;font-family:inherit;letter-spacing:1px" title="Captions">CC</button>
+</div>
+<!-- ═══ END ENHANCEMENTS ═══ -->
+
 
 <!-- ═══ PASSCODE GATE ═══ -->
 <div id="passcodeGate" style="
@@ -820,6 +836,138 @@ document.addEventListener('keydown', e => {
   if (e.code === 'ArrowRight') { e.preventDefault(); skipScene(); }
   if (e.key === 'p' || e.key === 'P') { e.preventDefault(); togglePause(); }
 });
+
+// ═══ NEW SYSTEM ENHANCEMENTS ═══
+
+// Show seek bar after demo starts
+setTimeout(function(){ var sw=document.getElementById('seek-wrap'); if(sw) sw.style.display='flex'; }, 2000);
+
+// ─── GSAP Scene Animations ───
+(function(){
+  if (typeof gsap === 'undefined') return;
+  var observer = new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if (node.nodeType !== 1) return;
+        var scene = node.classList && node.classList.contains('scene') ? node : node.querySelector && node.querySelector('.scene');
+        if (!scene) scene = node;
+        var tl = gsap.timeline();
+        var items = scene.querySelectorAll('.scene-label, h2, .scene-heading, .narration, .data-card, .artist-card, .tier-card, .program-pill, .impact-item, .quote-box, .proclamation-box, .tonight-sponsor, .prog-item, .media-tag, .self-funded, .link-card, .covenant-box, .pillar-card');
+        if (items.length) tl.from(items, {opacity:0, y:18, duration:0.4, stagger:0.05, ease:'power2.out'}, 0.05);
+      });
+    });
+  });
+  var container = document.getElementById('scene-container') || document.getElementById('app');
+  if (container) observer.observe(container, {childList:true, subtree:true});
+  // Also animate on class changes (for scene.active pattern)
+  document.querySelectorAll('.scene').forEach(function(s){
+    var obs2 = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if (m.attributeName === 'class' && s.classList.contains('active')) {
+          var tl = gsap.timeline();
+          var items = s.querySelectorAll('.scene-label, .scene-heading, .narration, .data-card, .tonight-sponsor, .prog-item, .quote-box, .data-grid, .sponsor-row');
+          if (items.length) tl.from(items, {opacity:0, y:18, duration:0.4, stagger:0.05, ease:'power2.out'}, 0.05);
+        }
+      });
+    });
+    obs2.observe(s, {attributes:true});
+  });
+})();
+
+// ─── Subtitles ───
+var ccEnabled = false;
+var subtitleBar = document.getElementById('subtitle-bar');
+var subtitleTextEl = document.getElementById('subtitle-text');
+var subtitleTimer = null;
+
+function toggleCC() {
+  ccEnabled = !ccEnabled;
+  var btn = document.getElementById('cc-btn');
+  subtitleBar.style.display = ccEnabled ? 'block' : 'none';
+  btn.style.borderColor = ccEnabled ? 'var(--accent,var(--gold,#d4a853))' : 'rgba(255,255,255,0.3)';
+  btn.style.color = ccEnabled ? 'var(--accent,var(--gold,#d4a853))' : 'rgba(255,255,255,0.3)';
+  if (ccEnabled) startSubtitles();
+}
+
+function startSubtitles() {
+  clearInterval(subtitleTimer);
+  if (!ccEnabled) return;
+  // Find narration text from active scene or scene container
+  var narr = document.querySelector('.scene.active .narration') || document.querySelector('#scene-container .narration');
+  if (!narr) { subtitleTextEl.textContent = ''; return; }
+  var text = narr.textContent.replace(/[\u201C\u201D""]/g, '').trim();
+  var sentences = text.split(/(?<=[.!?])\s+/).filter(function(s){ return s.length > 3; });
+  if (!sentences.length) return;
+  var i = 0;
+  var dur = (player.duration && !isNaN(player.duration)) ? player.duration : 30;
+  var per = (dur / sentences.length) * 1000;
+  subtitleTextEl.textContent = sentences[0];
+  subtitleTimer = setInterval(function(){
+    i++;
+    if (i < sentences.length) subtitleTextEl.textContent = sentences[i];
+    else { clearInterval(subtitleTimer); subtitleTextEl.textContent = ''; }
+  }, per);
+}
+
+player.addEventListener('play', function(){ if(ccEnabled) startSubtitles(); });
+player.addEventListener('pause', function(){ clearInterval(subtitleTimer); });
+player.addEventListener('ended', function(){ clearInterval(subtitleTimer); subtitleTextEl.textContent = ''; });
+
+// ─── Seek Bar ───
+function _fmt(s){ if(!s||isNaN(s))return '0:00'; return Math.floor(s/60)+':'+('0'+Math.floor(s%60)).slice(-2); }
+setInterval(function(){
+  if(!player.duration) return;
+  var sf=document.getElementById('seek-fill'), st=document.getElementById('seek-time'), sd=document.getElementById('seek-dur');
+  if(sf) sf.style.width=((player.currentTime/player.duration)*100)+'%';
+  if(st) st.textContent=_fmt(player.currentTime);
+  if(sd) sd.textContent=_fmt(player.duration);
+}, 200);
+
+function seekAudio(e){
+  var track=document.getElementById('seek-track');
+  var rect=track.getBoundingClientRect();
+  var pct=(e.clientX-rect.left)/rect.width;
+  if(player.duration) player.currentTime=pct*player.duration;
+}
+
+// ─── Volume / Mute ───
+function toggleMute(){
+  player.muted=!player.muted;
+  document.getElementById('vol-btn').innerHTML=player.muted?'&#128263;':'&#128266;';
+}
+
+// ─── Swipe Navigation ───
+var _tsx=0,_tsy=0,_tst=0;
+document.addEventListener('touchstart',function(e){_tsx=e.touches[0].clientX;_tsy=e.touches[0].clientY;_tst=Date.now();},{passive:true});
+document.addEventListener('touchend',function(e){
+  var dx=e.changedTouches[0].clientX-_tsx,dy=e.changedTouches[0].clientY-_tsy,dt=Date.now()-_tst;
+  if(dt>500||Math.abs(dx)<50||Math.abs(dx)<Math.abs(dy)*1.5)return;
+  // Try common nav functions
+  if(dx<0){if(typeof next==='function')next();else if(typeof goScene==='function')goScene(1);}
+  else{if(typeof prev==='function')prev();else if(typeof goScene==='function')goScene(-1);}
+},{passive:true});
+
+// ─── Enhanced Keyboard ───
+document.addEventListener('keydown',function(e){
+  if(e.key==='c'||e.key==='C'){toggleCC();e.preventDefault();}
+  if(e.key==='m'||e.key==='M'){toggleMute();e.preventDefault();}
+  if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(function(){});e.preventDefault();}
+});
+
+// ─── Analytics ───
+(function(){
+  var demoName = document.title.replace(/[^a-zA-Z0-9]/g,'_');
+  function _log(ev,data){
+    var entry=Object.assign({event:ev,demo:demoName,ts:new Date().toISOString()},data||{});
+    console.log('[Analytics]',entry);
+    try{var s=JSON.parse(localStorage.getItem('demo_analytics_'+demoName)||'[]');s.push(entry);localStorage.setItem('demo_analytics_'+demoName,JSON.stringify(s.slice(-200)));}catch(e){}
+  }
+  _log('demo_open',{ua:navigator.userAgent});
+  player.addEventListener('ended',function(){_log('audio_ended',{});});
+})();
+
+// ═══ END ENHANCEMENTS ═══
+
 </script>
 </body>
 </html>
