@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HWF Coaches Forum 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
 :root{--navy:#0a1628;--navy2:#0f1d33;--gold:#d4a853;--gold2:#b8912e;--cream:#f5f0e8;--dim:#8899aa;--surface:rgba(255,255,255,0.04);--surface2:rgba(255,255,255,0.07);--border:rgba(212,168,83,0.15)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -59,6 +60,20 @@ body{font-family:'Georgia',serif;background:var(--navy);color:var(--cream);overf
   <h2>COACHES FORUM 2026</h2>
   <input id="pass" type="password" placeholder="ENTER CODE" onkeyup="if(event.key==='Enter')checkPass()">
   <div class="err" id="err"></div>
+</div>
+<!-- ─── SUBTITLE OVERLAY ─── -->
+<div id="subtitle-bar" style="display:none;position:fixed;bottom:60px;left:50%;transform:translateX(-50%);z-index:950;max-width:700px;width:90%;text-align:center;pointer-events:none">
+  <div id="subtitle-text" style="display:inline-block;background:rgba(0,0,0,0.75);color:#fff;font-size:0.85rem;line-height:1.6;padding:8px 20px;border-radius:8px;backdrop-filter:blur(8px)"></div>
+</div>
+<!-- ─── SEEK BAR ─── -->
+<div id="seek-wrap" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:950;width:320px;display:none;align-items:center;gap:8px">
+  <span id="seek-time" style="font-size:0.5rem;color:var(--dim);font-family:monospace;min-width:36px">0:00</span>
+  <div id="seek-track" style="flex:1;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;cursor:pointer;position:relative" onclick="seekAudio(event)">
+    <div id="seek-fill" style="height:100%;background:var(--gold);border-radius:2px;width:0;transition:width 0.1s linear"></div>
+  </div>
+  <span id="seek-dur" style="font-size:0.5rem;color:var(--dim);font-family:monospace;min-width:36px;text-align:right">0:00</span>
+  <button id="vol-btn" onclick="toggleMute()" style="background:none;border:none;color:var(--gold);font-size:0.85rem;cursor:pointer;padding:2px 4px" title="Mute">&#128266;</button>
+  <button id="cc-btn" onclick="toggleCC()" style="background:none;border:1px solid var(--dim);color:var(--dim);font-size:0.5rem;cursor:pointer;padding:2px 5px;border-radius:3px;font-family:inherit;letter-spacing:1px" title="Captions">CC</button>
 </div>
 <div id="app">
   <div id="watermark"><img src="https://cdn.prod.website-files.com/67bceb5220fb05a6e5414521/67c09dc7aebfc1185b06943d_cropped-sitelogo1-300x300-2.png" alt="HWF"></div>
@@ -487,11 +502,125 @@ function goToFlyer() {
 function next() { clearTimeout(autoTimer); clearTimeout(safetyTimer); player.pause(); showScene(current + 1); }
 function prev() { clearTimeout(autoTimer); clearTimeout(safetyTimer); player.pause(); showScene(current - 1); }
 
+// ─── ENHANCED KEYBOARD ───
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') next();
   if (e.key === 'ArrowLeft') prev();
   if (e.key === ' ') { e.preventDefault(); toggleAudio(); }
+  if (e.key === 'c' || e.key === 'C') toggleCC();
+  if (e.key === 'm' || e.key === 'M') toggleMute();
+  if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
 });
+
+// ─── GSAP Scene Animations ───
+let gsapTL = null;
+const _origShow = showScene;
+showScene = function(idx) {
+  if (gsapTL) gsapTL.kill();
+  _origShow(idx);
+  // Show seek bar when app is visible
+  document.getElementById('seek-wrap').style.display = 'flex';
+  setTimeout(() => {
+    const activeScene = document.querySelector('.scene.active .content');
+    if (!activeScene || typeof gsap === 'undefined') return;
+    gsapTL = gsap.timeline();
+    const label = activeScene.querySelector('.scene-label');
+    const heading = activeScene.querySelector('.scene-heading');
+    const narration = activeScene.querySelector('.narration');
+    const cards = activeScene.querySelectorAll('.data-card, .tonight-sponsor, .prog-item');
+    const quotes = activeScene.querySelectorAll('.quote-box');
+    if (label) gsapTL.from(label, {opacity:0, y:15, duration:0.4}, 0);
+    if (heading) gsapTL.from(heading, {opacity:0, y:25, duration:0.5}, 0.1);
+    if (narration) gsapTL.from(narration, {opacity:0, y:15, duration:0.4}, 0.25);
+    if (cards.length) gsapTL.from(cards, {opacity:0, y:20, duration:0.35, stagger:0.06}, 0.35);
+    if (quotes.length) gsapTL.from(quotes, {opacity:0, x:-20, duration:0.4, stagger:0.1}, 0.4);
+  }, 100);
+};
+
+// ─── Subtitles ───
+let ccEnabled = false;
+const subtitleBar = document.getElementById('subtitle-bar');
+const subtitleText = document.getElementById('subtitle-text');
+let subtitleInterval = null;
+
+function toggleCC() {
+  ccEnabled = !ccEnabled;
+  const btn = document.getElementById('cc-btn');
+  subtitleBar.style.display = ccEnabled ? 'block' : 'none';
+  btn.style.borderColor = ccEnabled ? 'var(--gold)' : 'var(--dim)';
+  btn.style.color = ccEnabled ? 'var(--gold)' : 'var(--dim)';
+}
+
+function showSubtitles() {
+  clearInterval(subtitleInterval);
+  if (!ccEnabled) return;
+  const activeScene = document.querySelector('.scene.active');
+  if (!activeScene) return;
+  const narr = activeScene.querySelector('.narration');
+  if (!narr) { subtitleText.textContent = ''; return; }
+  const text = narr.textContent.replace(/["\u201C\u201D]/g, '').trim();
+  const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.length > 0);
+  if (!sentences.length) return;
+  let i = 0;
+  const dur = (player.duration || 30);
+  const perSentence = (dur / sentences.length) * 1000;
+  subtitleText.textContent = sentences[0];
+  subtitleInterval = setInterval(() => {
+    i++;
+    if (i < sentences.length) subtitleText.textContent = sentences[i];
+    else clearInterval(subtitleInterval);
+  }, perSentence);
+}
+
+// Hook subtitles into audio play
+player.addEventListener('play', () => { if (ccEnabled) showSubtitles(); });
+player.addEventListener('pause', () => { clearInterval(subtitleInterval); });
+
+// ─── Seek Bar ───
+function formatTime(s) {
+  if (!s || isNaN(s)) return '0:00';
+  return Math.floor(s/60) + ':' + ('0' + Math.floor(s%60)).slice(-2);
+}
+setInterval(() => {
+  if (!player.duration) return;
+  document.getElementById('seek-fill').style.width = ((player.currentTime / player.duration) * 100) + '%';
+  document.getElementById('seek-time').textContent = formatTime(player.currentTime);
+  document.getElementById('seek-dur').textContent = formatTime(player.duration);
+}, 200);
+
+function seekAudio(e) {
+  const track = document.getElementById('seek-track');
+  const rect = track.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  if (player.duration) player.currentTime = pct * player.duration;
+}
+
+// ─── Volume / Mute ───
+function toggleMute() {
+  player.muted = !player.muted;
+  document.getElementById('vol-btn').innerHTML = player.muted ? '&#128263;' : '&#128266;';
+}
+
+// ─── Swipe Navigation ───
+let touchSX=0, touchSY=0, touchST=0;
+document.addEventListener('touchstart', e => { touchSX=e.touches[0].clientX; touchSY=e.touches[0].clientY; touchST=Date.now(); }, {passive:true});
+document.addEventListener('touchend', e => {
+  const dx=e.changedTouches[0].clientX-touchSX, dy=e.changedTouches[0].clientY-touchSY, dt=Date.now()-touchST;
+  if (dt>500 || Math.abs(dx)<50 || Math.abs(dx)<Math.abs(dy)*1.5) return;
+  if (dx<0) next(); else prev();
+}, {passive:true});
+
+// ─── Analytics ───
+function logA(ev, data) {
+  const entry = {event:ev, demo:'HWF_CoachesForum', ts:new Date().toISOString(), ...data};
+  console.log('[Analytics]', entry);
+  try { const s=JSON.parse(localStorage.getItem('demo_analytics_CF')||'[]'); s.push(entry); localStorage.setItem('demo_analytics_CF',JSON.stringify(s.slice(-200))); } catch(e){}
+}
+logA('demo_open', {ua:navigator.userAgent});
+const _origShow2 = showScene;
+showScene = function(idx) { logA('scene_change', {scene:idx+1}); _origShow2(idx); };
 </script>
+</body>
+</html>
 </body>
 </html>
