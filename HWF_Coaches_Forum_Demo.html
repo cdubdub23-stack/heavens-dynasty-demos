@@ -58,9 +58,11 @@ body{font-family:'Georgia',serif;background:var(--navy);color:var(--cream);overf
 <div id="gate">
   <img src="https://cdn.prod.website-files.com/67bceb5220fb05a6e5414521/67c09dc7aebfc1185b06943d_cropped-sitelogo1-300x300-2.png" alt="HWF" style="width:100px;margin-bottom:16px">
   <h2>COACHES FORUM 2026</h2>
-  <input id="pass" type="text" placeholder="ENTER CODE" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeyup="if(event.key==='Enter')checkPass()" style="margin-bottom:12px">
-  <button onclick="checkPass()" style="background:linear-gradient(135deg,#d4a853,#b8912e);color:#0a1628;border:none;padding:12px 40px;border-radius:8px;font-size:0.85rem;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:inherit;text-transform:uppercase">ENTER</button>
-  <div class="err" id="err"></div>
+  <form onsubmit="event.preventDefault();checkPass();" style="display:flex;flex-direction:column;align-items:center;width:100%;max-width:300px">
+    <input id="pass" type="text" placeholder="ENTER CODE" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="margin-bottom:16px;width:100%;padding:16px 20px;font-size:18px;text-align:center;background:rgba(255,255,255,0.06);border:1px solid rgba(212,168,83,0.3);border-radius:10px;color:#f5f0e8;outline:none;letter-spacing:3px;font-family:inherit;-webkit-appearance:none">
+    <button type="submit" style="background:linear-gradient(135deg,#d4a853,#b8912e);color:#0a1628;border:none;padding:16px 60px;border-radius:10px;font-size:1rem;font-weight:700;letter-spacing:3px;cursor:pointer;font-family:inherit;text-transform:uppercase;width:100%;-webkit-appearance:none;touch-action:manipulation">ENTER</button>
+  </form>
+  <div class="err" id="err" style="margin-top:12px"></div>
 </div>
 <!-- ─── SUBTITLE OVERLAY ─── -->
 <div id="subtitle-bar" style="display:none;position:fixed;bottom:60px;left:50%;transform:translateX(-50%);z-index:950;max-width:700px;width:90%;text-align:center;pointer-events:none">
