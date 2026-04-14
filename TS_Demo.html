@@ -834,6 +834,7 @@ document.addEventListener('touchend',function(e){
 
 // ─── Enhanced Keyboard ───
 document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
   if(e.key==='c'||e.key==='C'){toggleCC();e.preventDefault();}
   if(e.key==='m'||e.key==='M'){toggleMute();e.preventDefault();}
   if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(function(){});e.preventDefault();}

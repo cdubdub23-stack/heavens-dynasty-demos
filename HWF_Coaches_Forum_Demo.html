@@ -504,6 +504,7 @@ function prev() { clearTimeout(autoTimer); clearTimeout(safetyTimer); player.pau
 
 // ─── ENHANCED KEYBOARD ───
 document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   if (e.key === 'ArrowRight') next();
   if (e.key === 'ArrowLeft') prev();
   if (e.key === ' ') { e.preventDefault(); toggleAudio(); }
