@@ -304,6 +304,42 @@ html, body {
 }
 .ctrl-btn:hover { border-color: var(--primary); }
 
+/* ── Floating Books ─────────────────────────── */
+.floating-book {
+    position: fixed;
+    font-size: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    animation: float-book 12s infinite ease-in-out;
+    filter: drop-shadow(0 0 8px var(--primary-glow));
+}
+@keyframes float-book {
+    0% { opacity: 0; transform: translateY(110vh) rotate(0deg); }
+    10% { opacity: 0.4; }
+    50% { opacity: 0.3; transform: translateY(50vh) rotate(15deg); }
+    90% { opacity: 0.15; }
+    100% { opacity: 0; transform: translateY(-10vh) rotate(-10deg); }
+}
+
+/* ── Kid Photos Background ──────────────────── */
+.bg-photo {
+    position: fixed;
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+    object-fit: cover;
+    animation: fade-float 16s infinite ease-in-out;
+    filter: brightness(0.4) saturate(0.7);
+    border: 1px solid rgba(14, 165, 233, 0.1);
+}
+@keyframes fade-float {
+    0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+    15% { opacity: 0.12; }
+    50% { opacity: 0.08; transform: scale(1) translateY(-10px); }
+    85% { opacity: 0.12; }
+    100% { opacity: 0; transform: scale(0.95) translateY(20px); }
+}
+
 /* ── Particles ──────────────────────────────── */
 .particle {
     position: fixed;
@@ -335,14 +371,13 @@ window.__AUDIO_B64 = {
 </script>
 </head>
 <body>
-
 <!-- Passcode Gate -->
-<div id="gate" style="position:fixed;inset:0;z-index:9999;background:var(--bg-deep);display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <h2 style="font-size:1.5rem;margin-bottom:1.5rem;color:var(--text-dim);">Enter Passcode</h2>
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#0A1628;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <h2 style="font-size:1.5rem;margin-bottom:1.5rem;color:#94a3b8;">Enter Passcode</h2>
     <input id="gate-input" type="password" placeholder="Passcode" autofocus
-        style="padding:0.8rem 1.5rem;font-size:1.1rem;border-radius:8px;border:1px solid rgba(14,165,233,0.3);background:var(--bg-card);color:var(--text);text-align:center;width:220px;"
+        style="padding:0.8rem 1.5rem;font-size:1.1rem;border-radius:8px;border:1px solid rgba(14,165,233,0.3);background:rgba(14,30,56,0.85);color:#f1f5f9;text-align:center;width:220px;"
         onkeydown="if(event.key==='Enter')checkGate()">
-    <button onclick="checkGate()" style="margin-top:1rem;padding:0.6rem 2rem;font-size:0.95rem;border-radius:50px;border:none;background:var(--primary);color:var(--bg-deep);font-weight:600;cursor:pointer;">Enter</button>
+    <button onclick="checkGate()" style="margin-top:1rem;padding:0.6rem 2rem;font-size:0.95rem;border-radius:50px;border:none;background:#0ea5e9;color:#0A1628;font-weight:600;cursor:pointer;">Enter</button>
     <p id="gate-error" style="margin-top:1rem;color:#ef4444;font-size:0.85rem;display:none;">Incorrect passcode</p>
 </div>
 <script>
@@ -359,8 +394,16 @@ function checkGate(){
 if(sessionStorage.getItem('bn_auth')==='1'){document.getElementById('gate').style.display='none';}
 </script>
 
+
+
 <!-- Blueprint Grid -->
 <div class="blueprint-grid"></div>
+
+<!-- Floating Books -->
+<div id="floating-books"></div>
+
+<!-- Background Kid Photos -->
+<div id="bg-photos"></div>
 
 <!-- Floating Particles -->
 <div id="particles"></div>
@@ -542,6 +585,68 @@ function getAudioSrc(sceneId) {
     return 'audio/' + sceneId + '.mp3';
 }
 
+// ── Floating Books ─────────────────────────────────────
+function createFloatingBooks() {
+    const container = document.getElementById('floating-books');
+    const books = [
+        '\u{1F4DA}', '\u{1F4D6}', '\u{1F4D8}', '\u{1F4D7}', '\u{1F4D9}',
+        '\u{1F4BB}', '\u{1F9E0}', '\u{1F4A1}', '\u{1F680}', '\u{1F3A8}',
+        '\u{2728}', '\u{1F916}', '\u{1F4D0}', '\u{1F52C}', '\u{1F3AF}'
+    ];
+    for (let i = 0; i < 18; i++) {
+        const b = document.createElement('div');
+        b.className = 'floating-book';
+        b.textContent = books[i % books.length];
+        b.style.left = (Math.random() * 90 + 5) + '%';
+        b.style.fontSize = (1.2 + Math.random() * 1.8) + 'rem';
+        b.style.animationDelay = (Math.random() * 12) + 's';
+        b.style.animationDuration = (10 + Math.random() * 8) + 's';
+        container.appendChild(b);
+    }
+}
+
+// ── Background Kid Photos ──────────────────────────────
+function createBgPhotos() {
+    const container = document.getElementById('bg-photos');
+    // Unsplash Source — free stock photos of kids learning/coding/creating
+    const photos = [
+        'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1588072432836-e10032774350?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1581726707445-75cbe4ff0c8f?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&h=300&fit=crop',
+    ];
+    // Position photos in a subtle scattered layout
+    const positions = [
+        { top: '5%', left: '3%', w: 180, h: 130 },
+        { top: '10%', right: '5%', w: 160, h: 120 },
+        { top: '35%', left: '2%', w: 170, h: 125 },
+        { top: '40%', right: '3%', w: 150, h: 110 },
+        { top: '60%', left: '5%', w: 165, h: 120 },
+        { top: '65%', right: '4%', w: 175, h: 130 },
+        { top: '82%', left: '8%', w: 155, h: 115 },
+        { top: '80%', right: '6%', w: 160, h: 120 },
+    ];
+    photos.forEach((src, i) => {
+        const img = document.createElement('img');
+        img.className = 'bg-photo';
+        img.src = src;
+        img.loading = 'lazy';
+        const pos = positions[i % positions.length];
+        if (pos.top) img.style.top = pos.top;
+        if (pos.left) img.style.left = pos.left;
+        if (pos.right) img.style.right = pos.right;
+        img.style.width = pos.w + 'px';
+        img.style.height = pos.h + 'px';
+        img.style.animationDelay = (i * 2 + Math.random() * 3) + 's';
+        img.style.animationDuration = (14 + Math.random() * 6) + 's';
+        container.appendChild(img);
+    });
+}
+
 // ── Particles ──────────────────────────────────────────
 function createParticles() {
     const container = document.getElementById('particles');
@@ -625,6 +730,8 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Init ───────────────────────────────────────────────
+createFloatingBooks();
+createBgPhotos();
 createParticles();
 </script>
 </body>
