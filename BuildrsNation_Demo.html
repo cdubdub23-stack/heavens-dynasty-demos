@@ -330,7 +330,7 @@ html, body {
 
 /* ── Subtitles ──────────────────────────────── */
 #subtitles {
-    position: fixed; bottom: 1.5rem; left: 50%;
+    position: fixed; bottom: 5.5rem; left: 50%;
     transform: translateX(-50%);
     z-index: 50;
     background: var(--card);
@@ -346,7 +346,7 @@ html, body {
 }
 #subtitles.visible { display: block; }
 
-/* ── Controls ───────────────────────────────── */
+/* ── Top Controls (mute, subs) ──────────────── */
 #controls {
     position: fixed; top: 1.5rem; right: 1.5rem;
     z-index: 100;
@@ -365,6 +365,48 @@ html, body {
     transition: transform 0.2s;
 }
 .ctrl-btn:hover { transform: scale(1.1); }
+
+/* ── Playback Controls (prev, play/pause, next) */
+#playback {
+    position: fixed; bottom: 1.8rem; left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--card);
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px var(--shadow-lg);
+}
+.pb-btn {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+}
+.pb-btn:hover { background: rgba(0,0,0,0.05); transform: scale(1.1); }
+.pb-btn.play-pause {
+    width: 50px; height: 50px;
+    background: linear-gradient(135deg, var(--coral), var(--purple));
+    color: #fff;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+.pb-btn.play-pause:hover { transform: scale(1.12); }
+.scene-counter {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-soft);
+    min-width: 40px;
+    text-align: center;
+}
 
 /* ── Floating Books ─────────────────────────── */
 .floating-item {
@@ -420,27 +462,15 @@ window.__AUDIO_B64 = {
 </script>
 </head>
 <body>
-<!-- Passcode Gate -->
 <div id="gate" style="position:fixed;inset:0;z-index:9999;background:#fdf8f3;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <h2 style="font-family:Fredoka,sans-serif;font-size:1.8rem;margin-bottom:1.5rem;color:#2d3436;">Enter Passcode</h2>
-    <input id="gate-input" type="password" placeholder="Passcode" autofocus
-        style="padding:0.8rem 1.5rem;font-size:1.1rem;border-radius:50px;border:2px solid #e8d5f5;background:#fff;color:#2d3436;text-align:center;width:220px;font-family:Quicksand,sans-serif;"
-        onkeydown="if(event.key===&apos;Enter&apos;)checkGate()">
-    <button onclick="checkGate()" style="margin-top:1rem;padding:0.7rem 2.5rem;font-size:1rem;border-radius:50px;border:none;background:linear-gradient(135deg,#ff6b6b,#9b5de5);color:#fff;font-weight:700;cursor:pointer;font-family:Fredoka,sans-serif;">Enter</button>
-    <p id="gate-error" style="margin-top:1rem;color:#ff6b6b;font-size:0.85rem;display:none;">Incorrect passcode</p>
+<h2 style="font-family:Fredoka,sans-serif;font-size:1.8rem;margin-bottom:1.5rem;color:#2d3436;">Enter Passcode</h2>
+<input id="gate-input" type="password" placeholder="Passcode" autofocus style="padding:0.8rem 1.5rem;font-size:1.1rem;border-radius:50px;border:2px solid #e8d5f5;background:#fff;color:#2d3436;text-align:center;width:220px;font-family:Quicksand,sans-serif;" onkeydown="if(event.key==='Enter')checkGate()">
+<button onclick="checkGate()" style="margin-top:1rem;padding:0.7rem 2.5rem;font-size:1rem;border-radius:50px;border:none;background:linear-gradient(135deg,#ff6b6b,#9b5de5);color:#fff;font-weight:700;cursor:pointer;font-family:Fredoka,sans-serif;">Enter</button>
+<p id="gate-error" style="margin-top:1rem;color:#ff6b6b;font-size:0.85rem;display:none;">Incorrect passcode</p>
 </div>
 <script>
-function checkGate(){
-    var input=document.getElementById("gate-input").value;
-    if(input==="Craig"){
-        document.getElementById("gate").style.display="none";
-        sessionStorage.setItem("bn_auth","1");
-    } else {
-        document.getElementById("gate-error").style.display="block";
-        document.getElementById("gate-input").value="";
-    }
-}
-if(sessionStorage.getItem("bn_auth")==="1"){document.getElementById("gate").style.display="none";}
+function checkGate(){var i=document.getElementById('gate-input').value;if(i==='Craig'){document.getElementById('gate').style.display='none';sessionStorage.setItem('bn_auth','1');}else{document.getElementById('gate-error').style.display='block';document.getElementById('gate-input').value='';}}
+if(sessionStorage.getItem('bn_auth')==='1'){document.getElementById('gate').style.display='none';}
 </script>
 
 
@@ -578,10 +608,18 @@ if(sessionStorage.getItem("bn_auth")==="1"){document.getElementById("gate").styl
 <!-- Subtitles -->
 <div id="subtitles"></div>
 
-<!-- Controls -->
+<!-- Top Controls -->
 <div id="controls" style="display:none;">
     <button class="ctrl-btn" id="btn-mute" onclick="toggleMute()" title="Mute (M)">&#x1F50A;</button>
     <button class="ctrl-btn" id="btn-subs" onclick="toggleSubs()" title="Subtitles (C)">C</button>
+</div>
+
+<!-- Playback Controls -->
+<div id="playback">
+    <button class="pb-btn" onclick="prevScene()" title="Previous (Left)">&#x23EE;</button>
+    <button class="pb-btn play-pause" id="btn-playpause" onclick="togglePlay()" title="Play/Pause (Space)">&#x23F8;</button>
+    <button class="pb-btn" onclick="skipNext()" title="Next (Right)">&#x23ED;</button>
+    <span class="scene-counter" id="scene-counter">1 / 8</span>
 </div>
 
 <!-- Audio -->
@@ -616,12 +654,18 @@ let player = document.getElementById('player');
 let muted = false;
 let subsVisible = true;
 let playing = false;
+let paused = false;
+let sceneTimer = null;
 
 function getAudioSrc(sceneId) {
     if (window.__AUDIO_B64 && window.__AUDIO_B64[sceneId]) {
         return 'data:audio/mpeg;base64,' + window.__AUDIO_B64[sceneId];
     }
     return 'audio/' + sceneId + '.mp3';
+}
+
+function updateCounter() {
+    document.getElementById('scene-counter').textContent = (currentScene + 1) + ' / ' + SCENES.length;
 }
 
 // ── Floating Blobs ─────────────────────────────────────
@@ -704,17 +748,19 @@ function startDemo() {
     document.getElementById('splash').classList.add('hidden');
     document.getElementById('scenes').style.display = 'block';
     document.getElementById('controls').style.display = 'flex';
+    document.getElementById('playback').style.display = 'flex';
     playing = true;
-    setTimeout(() => nextScene(), 500);
+    paused = false;
+    setTimeout(() => goToScene(0), 500);
 }
 
-function nextScene() {
-    if (!playing) return;
-    currentScene++;
-    if (currentScene >= SCENES.length) {
-        currentScene = SCENES.length - 1;
-        return;
-    }
+function goToScene(index) {
+    // Clear any pending timer
+    if (sceneTimer) { clearTimeout(sceneTimer); sceneTimer = null; }
+
+    if (index < 0) index = 0;
+    if (index >= SCENES.length) index = SCENES.length - 1;
+    currentScene = index;
 
     const scene = SCENES[currentScene];
     document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
@@ -726,10 +772,47 @@ function nextScene() {
 
     player.src = getAudioSrc(scene.id);
     player.muted = muted;
-    player.play().catch(() => {});
+    if (!paused) player.play().catch(() => {});
 
     showSubtitle(scene.id);
-    setTimeout(() => nextScene(), scene.duration);
+    updateCounter();
+
+    // Auto-advance if not paused and not last scene
+    if (!paused && currentScene < SCENES.length - 1) {
+        sceneTimer = setTimeout(() => goToScene(currentScene + 1), scene.duration);
+    }
+}
+
+function nextScene() {
+    // Legacy — redirects to goToScene
+    goToScene(currentScene + 1);
+}
+
+function prevScene() {
+    goToScene(currentScene - 1);
+}
+
+function skipNext() {
+    goToScene(currentScene + 1);
+}
+
+function togglePlay() {
+    paused = !paused;
+    const btn = document.getElementById('btn-playpause');
+    if (paused) {
+        // Pause
+        btn.innerHTML = '&#x25B6;';
+        player.pause();
+        if (sceneTimer) { clearTimeout(sceneTimer); sceneTimer = null; }
+    } else {
+        // Resume
+        btn.innerHTML = '&#x23F8;';
+        player.play().catch(() => {});
+        // Schedule next scene from current position
+        if (currentScene < SCENES.length - 1) {
+            sceneTimer = setTimeout(() => goToScene(currentScene + 1), SCENES[currentScene].duration / 2);
+        }
+    }
 }
 
 function showSubtitle(id) {
@@ -756,7 +839,13 @@ function toggleSubs() {
 document.addEventListener('keydown', e => {
     if (e.key === 'm' || e.key === 'M') toggleMute();
     if (e.key === 'c' || e.key === 'C') toggleSubs();
-    if (e.key === ' ') { e.preventDefault(); if (currentScene === -1) startDemo(); }
+    if (e.key === ' ') {
+        e.preventDefault();
+        if (currentScene === -1) startDemo();
+        else togglePlay();
+    }
+    if (e.key === 'ArrowLeft') prevScene();
+    if (e.key === 'ArrowRight') skipNext();
 });
 
 // ── Init ───────────────────────────────────────────────
