@@ -4,26 +4,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Buildrs Nation — Building Tomorrow's Builders</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    --primary: #0ea5e9;
-    --primary-glow: rgba(14, 165, 233, 0.3);
-    --accent: #f59e0b;
-    --bg-deep: #0A1628;
-    --bg-card: rgba(14, 30, 56, 0.85);
-    --text: #f1f5f9;
-    --text-dim: #94a3b8;
-    --success: #10b981;
+    --peach: #ffecd2;
+    --lavender: #e8d5f5;
+    --mint: #d4f5e9;
+    --sky: #d4eaf7;
+    --coral: #ff6b6b;
+    --sunshine: #ffd93d;
+    --ocean: #4ecdc4;
+    --purple: #9b5de5;
+    --bg: #fdf8f3;
+    --card: #ffffff;
+    --text: #2d3436;
+    --text-soft: #636e72;
+    --shadow: rgba(0, 0, 0, 0.06);
+    --shadow-lg: rgba(0, 0, 0, 0.1);
 }
 
 html, body {
     width: 100%; height: 100%;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg-deep);
+    font-family: 'Quicksand', -apple-system, sans-serif;
+    background: var(--bg);
     color: var(--text);
     overflow: hidden;
+}
+
+/* ── Gradient Background ────────────────────── */
+.bg-gradient {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, var(--peach) 0%, var(--sky) 35%, var(--lavender) 65%, var(--mint) 100%);
+    opacity: 0.4;
+}
+
+/* ── Floating Shapes ────────────────────────── */
+.float-shape {
+    position: fixed;
+    border-radius: 50%;
+    opacity: 0.15;
+    pointer-events: none;
+    animation: blob-float 15s infinite ease-in-out;
+}
+@keyframes blob-float {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    25% { transform: translate(30px, -40px) scale(1.1) rotate(5deg); }
+    50% { transform: translate(-20px, 20px) scale(0.95) rotate(-3deg); }
+    75% { transform: translate(15px, 35px) scale(1.05) rotate(4deg); }
 }
 
 /* ── Splash Screen ──────────────────────────── */
@@ -31,72 +60,54 @@ html, body {
     position: fixed; inset: 0; z-index: 1000;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    background: var(--bg-deep);
+    background: var(--bg);
     cursor: pointer;
     transition: opacity 0.8s ease;
 }
 #splash.hidden { opacity: 0; pointer-events: none; }
 
 #splash h1 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 900;
-    letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.3rem;
 }
+#splash h1 span { color: var(--coral); }
 #splash .tagline {
     font-size: clamp(1rem, 2.5vw, 1.4rem);
-    color: var(--text-dim);
+    color: var(--text-soft);
     margin-bottom: 3rem;
     text-align: center;
     padding: 0 2rem;
+    font-weight: 500;
 }
 #splash .start-btn {
-    padding: 1rem 3rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--bg-deep);
-    background: var(--primary);
+    padding: 1.2rem 3.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: 'Fredoka', sans-serif;
+    color: #fff;
+    background: linear-gradient(135deg, var(--coral), var(--purple));
     border: none;
-    border-radius: 50px;
+    border-radius: 60px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 0 30px var(--primary-glow);
+    box-shadow: 0 8px 30px rgba(255, 107, 107, 0.3);
 }
 #splash .start-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 50px var(--primary-glow);
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255, 107, 107, 0.4);
 }
-.splash-stats {
-    display: flex; gap: 3rem;
+.splash-icons {
+    display: flex; gap: 2rem;
     margin-top: 3rem;
-    opacity: 0.7;
+    font-size: 2.5rem;
+    animation: bounce-icons 3s infinite ease-in-out;
 }
-.splash-stats .stat {
-    text-align: center;
-}
-.splash-stats .stat-num {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--accent);
-}
-.splash-stats .stat-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-dim);
-}
-
-/* ── Blueprint Grid Background ──────────────── */
-.blueprint-grid {
-    position: fixed; inset: 0; z-index: 0;
-    background-image:
-        linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
+@keyframes bounce-icons {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
 }
 
 /* ── Scene Container ────────────────────────── */
@@ -108,67 +119,84 @@ html, body {
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transform: translateY(40px) scale(0.95);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
     text-align: center;
 }
 .scene.active {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
-/* ── Scene Styles ───────────────────────────── */
-.scene-icon {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    filter: drop-shadow(0 0 20px var(--primary-glow));
+/* ── Scene Content ──────────────────────────── */
+.scene-emoji {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: wiggle 2s infinite ease-in-out;
 }
+@keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
 .scene h2 {
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 800;
-    margin-bottom: 1.5rem;
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(1.8rem, 4.5vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 1.2rem;
     line-height: 1.2;
+    color: var(--text);
 }
-.scene h2 .highlight {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+.scene h2 .pop { color: var(--coral); }
+.scene h2 .ocean { color: var(--ocean); }
+.scene h2 .sun { color: var(--sunshine); }
+.scene h2 .purp { color: var(--purple); }
+
 .scene p {
-    font-size: clamp(1rem, 2vw, 1.3rem);
-    color: var(--text-dim);
-    max-width: 700px;
-    line-height: 1.7;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-soft);
+    max-width: 650px;
+    line-height: 1.8;
+    font-weight: 500;
 }
-.scene .stat-row {
-    display: flex; gap: 2.5rem;
+
+/* ── Stat Bubbles ───────────────────────────── */
+.bubbles {
+    display: flex; gap: 1.5rem;
     margin-top: 2rem;
     flex-wrap: wrap;
     justify-content: center;
 }
-.scene .stat-box {
-    background: var(--bg-card);
-    border: 1px solid rgba(14, 165, 233, 0.2);
-    border-radius: 12px;
+.bubble {
+    background: var(--card);
+    border-radius: 24px;
     padding: 1.5rem 2rem;
-    min-width: 140px;
+    min-width: 130px;
+    box-shadow: 0 4px 20px var(--shadow);
+    transition: transform 0.3s;
 }
-.scene .stat-box .num {
+.bubble:hover { transform: translateY(-4px) rotate(1deg); }
+.bubble:nth-child(1) { border-top: 4px solid var(--coral); }
+.bubble:nth-child(2) { border-top: 4px solid var(--ocean); }
+.bubble:nth-child(3) { border-top: 4px solid var(--sunshine); }
+.bubble .num {
+    font-family: 'Fredoka', sans-serif;
     font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--accent);
+    font-weight: 700;
+    color: var(--text);
 }
-.scene .stat-box .label {
+.bubble .label {
     font-size: 0.8rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-dim);
-    margin-top: 0.3rem;
+    letter-spacing: 0.05em;
+    color: var(--text-soft);
+    margin-top: 0.2rem;
 }
 
-/* Track cards */
+/* ── Track Cards ────────────────────────────── */
 .tracks {
     display: flex; gap: 1.5rem;
     margin-top: 2rem;
@@ -176,112 +204,145 @@ html, body {
     justify-content: center;
 }
 .track-card {
-    background: var(--bg-card);
-    border: 1px solid rgba(14, 165, 233, 0.15);
-    border-radius: 16px;
-    padding: 1.5rem;
-    width: 200px;
+    background: var(--card);
+    border-radius: 24px;
+    padding: 1.8rem 1.5rem;
+    width: 190px;
     text-align: center;
-    transition: transform 0.3s, border-color 0.3s;
+    box-shadow: 0 4px 20px var(--shadow);
+    transition: transform 0.3s;
 }
-.track-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--primary);
+.track-card:hover { transform: translateY(-6px) rotate(-1deg); }
+.track-card:nth-child(1) { border-bottom: 4px solid var(--sunshine); }
+.track-card:nth-child(2) { border-bottom: 4px solid var(--ocean); }
+.track-card:nth-child(3) { border-bottom: 4px solid var(--purple); }
+.track-card .track-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.track-card h3 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
 }
-.track-card .track-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-.track-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
-.track-card .grades { font-size: 0.8rem; color: var(--text-dim); }
+.track-card .grades { font-size: 0.85rem; color: var(--text-soft); font-weight: 500; }
 
-/* Founder */
-.founder-quote {
-    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-    font-style: italic;
-    color: var(--text);
-    max-width: 650px;
-    line-height: 1.8;
-    border-left: 3px solid var(--accent);
-    padding-left: 1.5rem;
-    text-align: left;
+/* ── Founder Quote ──────────────────────────── */
+.quote-card {
+    background: var(--card);
+    border-radius: 28px;
+    padding: 2.5rem;
+    max-width: 600px;
+    box-shadow: 0 8px 30px var(--shadow-lg);
+    position: relative;
 }
-.founder-name {
+.quote-card::before {
+    content: '\201C';
+    position: absolute;
+    top: -0.2rem; left: 1.5rem;
+    font-size: 5rem;
+    color: var(--coral);
+    opacity: 0.3;
+    font-family: 'Fredoka', sans-serif;
+}
+.quote-card p {
+    font-size: 1.2rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--text);
+}
+.quote-card .author {
     margin-top: 1rem;
     font-weight: 700;
-    color: var(--accent);
+    font-style: normal;
+    color: var(--purple);
 }
 
-/* Board */
+/* ── Board Grid ─────────────────────────────── */
 .board-grid {
     display: flex; gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 1.5rem;
 }
-.board-member {
-    background: var(--bg-card);
-    border: 1px solid rgba(14, 165, 233, 0.1);
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    width: 180px;
-    text-align: center;
+.board-pill {
+    background: var(--card);
+    border-radius: 50px;
+    padding: 0.7rem 1.4rem;
+    box-shadow: 0 2px 12px var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
-.board-member .name { font-weight: 700; font-size: 0.85rem; }
-.board-member .role { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem; }
+.board-pill .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+}
+.board-pill:nth-child(1) .dot { background: var(--coral); }
+.board-pill:nth-child(2) .dot { background: var(--ocean); }
+.board-pill:nth-child(3) .dot { background: var(--sunshine); }
+.board-pill:nth-child(4) .dot { background: var(--purple); }
+.board-pill:nth-child(5) .dot { background: var(--coral); }
+.board-pill .name { font-weight: 600; font-size: 0.85rem; }
 
-/* CTA */
-.cta-actions {
+/* ── CTA ────────────────────────────────────── */
+.cta-btns {
     display: flex; gap: 1.5rem;
     margin-top: 2.5rem;
     flex-wrap: wrap;
     justify-content: center;
 }
 .cta-btn {
-    padding: 1rem 2.5rem;
-    font-size: 1rem;
+    padding: 1.1rem 2.8rem;
+    font-size: 1.05rem;
     font-weight: 700;
+    font-family: 'Fredoka', sans-serif;
     border-radius: 50px;
     border: none;
     cursor: pointer;
     transition: transform 0.2s;
 }
-.cta-btn:hover { transform: scale(1.05); }
+.cta-btn:hover { transform: scale(1.06); }
 .cta-btn.primary {
-    background: var(--primary);
-    color: var(--bg-deep);
-    box-shadow: 0 0 25px var(--primary-glow);
+    background: linear-gradient(135deg, var(--coral), var(--purple));
+    color: #fff;
+    box-shadow: 0 6px 25px rgba(255, 107, 107, 0.3);
 }
 .cta-btn.secondary {
-    background: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
+    background: var(--card);
+    color: var(--purple);
+    border: 2px solid var(--purple);
+    box-shadow: 0 4px 15px var(--shadow);
 }
 
 /* ── Progress Bar ───────────────────────────── */
 #progress-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
-    height: 3px; z-index: 100;
-    background: rgba(14, 165, 233, 0.1);
+    height: 5px; z-index: 100;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
 }
 #progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
+    background: linear-gradient(90deg, var(--coral), var(--sunshine), var(--ocean), var(--purple));
     width: 0%;
     transition: width 0.5s ease;
+    border-radius: 5px;
 }
 
 /* ── Subtitles ──────────────────────────────── */
 #subtitles {
-    position: fixed; bottom: 2rem; left: 50%;
+    position: fixed; bottom: 1.5rem; left: 50%;
     transform: translateX(-50%);
     z-index: 50;
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--card);
     padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    color: var(--text);
+    border-radius: 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-soft);
     max-width: 80%;
     text-align: center;
     display: none;
-    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px var(--shadow);
 }
 #subtitles.visible { display: block; }
 
@@ -292,69 +353,57 @@ html, body {
     display: flex; gap: 0.5rem;
 }
 .ctrl-btn {
-    width: 36px; height: 36px;
+    width: 40px; height: 40px;
     border-radius: 50%;
-    border: 1px solid rgba(14, 165, 233, 0.3);
-    background: var(--bg-card);
+    border: none;
+    background: var(--card);
     color: var(--text);
-    font-size: 0.85rem;
+    font-size: 1rem;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: border-color 0.2s;
+    box-shadow: 0 2px 10px var(--shadow);
+    transition: transform 0.2s;
 }
-.ctrl-btn:hover { border-color: var(--primary); }
+.ctrl-btn:hover { transform: scale(1.1); }
 
 /* ── Floating Books ─────────────────────────── */
-.floating-book {
+.floating-item {
     position: fixed;
     font-size: 2rem;
     opacity: 0;
     pointer-events: none;
-    animation: float-book 12s infinite ease-in-out;
-    filter: drop-shadow(0 0 8px var(--primary-glow));
+    animation: float-drift 14s infinite ease-in-out;
 }
-@keyframes float-book {
-    0% { opacity: 0; transform: translateY(110vh) rotate(0deg); }
-    10% { opacity: 0.4; }
-    50% { opacity: 0.3; transform: translateY(50vh) rotate(15deg); }
-    90% { opacity: 0.15; }
-    100% { opacity: 0; transform: translateY(-10vh) rotate(-10deg); }
+@keyframes float-drift {
+    0% { opacity: 0; transform: translateY(100vh) rotate(-10deg); }
+    15% { opacity: 0.5; }
+    50% { transform: translateY(40vh) rotate(8deg); }
+    85% { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(-10vh) rotate(-5deg); }
 }
 
-/* ── Kid Photos Background ──────────────────── */
-.bg-photo {
+/* ── Photo Polaroids ────────────────────────── */
+.polaroid {
     position: fixed;
-    border-radius: 12px;
+    background: white;
+    padding: 6px 6px 24px 6px;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     opacity: 0;
     pointer-events: none;
+    animation: polaroid-float 18s infinite ease-in-out;
+}
+.polaroid img {
+    width: 100%; height: 100%;
     object-fit: cover;
-    animation: fade-float 16s infinite ease-in-out;
-    filter: brightness(0.4) saturate(0.7);
-    border: 1px solid rgba(14, 165, 233, 0.1);
+    border-radius: 2px;
 }
-@keyframes fade-float {
-    0% { opacity: 0; transform: scale(0.9) translateY(20px); }
-    15% { opacity: 0.12; }
-    50% { opacity: 0.08; transform: scale(1) translateY(-10px); }
-    85% { opacity: 0.12; }
-    100% { opacity: 0; transform: scale(0.95) translateY(20px); }
-}
-
-/* ── Particles ──────────────────────────────── */
-.particle {
-    position: fixed;
-    width: 3px; height: 3px;
-    background: var(--primary);
-    border-radius: 50%;
-    opacity: 0;
-    pointer-events: none;
-    animation: float-up 8s infinite;
-}
-@keyframes float-up {
-    0% { opacity: 0; transform: translateY(100vh) scale(0); }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.2; }
-    100% { opacity: 0; transform: translateY(-10vh) scale(1.5); }
+@keyframes polaroid-float {
+    0% { opacity: 0; transform: rotate(-5deg) scale(0.8); }
+    15% { opacity: 0.25; transform: rotate(2deg) scale(1); }
+    50% { opacity: 0.2; transform: rotate(-2deg) scale(0.98); }
+    85% { opacity: 0.25; transform: rotate(3deg) scale(1); }
+    100% { opacity: 0; transform: rotate(-4deg) scale(0.85); }
 }
 </style>
 <script>
@@ -372,60 +421,52 @@ window.__AUDIO_B64 = {
 </head>
 <body>
 <!-- Passcode Gate -->
-<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#0A1628;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <h2 style="font-size:1.5rem;margin-bottom:1.5rem;color:#94a3b8;">Enter Passcode</h2>
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#fdf8f3;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <h2 style="font-family:Fredoka,sans-serif;font-size:1.8rem;margin-bottom:1.5rem;color:#2d3436;">Enter Passcode</h2>
     <input id="gate-input" type="password" placeholder="Passcode" autofocus
-        style="padding:0.8rem 1.5rem;font-size:1.1rem;border-radius:8px;border:1px solid rgba(14,165,233,0.3);background:rgba(14,30,56,0.85);color:#f1f5f9;text-align:center;width:220px;"
-        onkeydown="if(event.key==='Enter')checkGate()">
-    <button onclick="checkGate()" style="margin-top:1rem;padding:0.6rem 2rem;font-size:0.95rem;border-radius:50px;border:none;background:#0ea5e9;color:#0A1628;font-weight:600;cursor:pointer;">Enter</button>
-    <p id="gate-error" style="margin-top:1rem;color:#ef4444;font-size:0.85rem;display:none;">Incorrect passcode</p>
+        style="padding:0.8rem 1.5rem;font-size:1.1rem;border-radius:50px;border:2px solid #e8d5f5;background:#fff;color:#2d3436;text-align:center;width:220px;font-family:Quicksand,sans-serif;"
+        onkeydown="if(event.key===&apos;Enter&apos;)checkGate()">
+    <button onclick="checkGate()" style="margin-top:1rem;padding:0.7rem 2.5rem;font-size:1rem;border-radius:50px;border:none;background:linear-gradient(135deg,#ff6b6b,#9b5de5);color:#fff;font-weight:700;cursor:pointer;font-family:Fredoka,sans-serif;">Enter</button>
+    <p id="gate-error" style="margin-top:1rem;color:#ff6b6b;font-size:0.85rem;display:none;">Incorrect passcode</p>
 </div>
 <script>
 function checkGate(){
-    var input=document.getElementById('gate-input').value;
-    if(input==='Craig'){
-        document.getElementById('gate').style.display='none';
-        sessionStorage.setItem('bn_auth','1');
+    var input=document.getElementById("gate-input").value;
+    if(input==="Craig"){
+        document.getElementById("gate").style.display="none";
+        sessionStorage.setItem("bn_auth","1");
     } else {
-        document.getElementById('gate-error').style.display='block';
-        document.getElementById('gate-input').value='';
+        document.getElementById("gate-error").style.display="block";
+        document.getElementById("gate-input").value="";
     }
 }
-if(sessionStorage.getItem('bn_auth')==='1'){document.getElementById('gate').style.display='none';}
+if(sessionStorage.getItem("bn_auth")==="1"){document.getElementById("gate").style.display="none";}
 </script>
 
 
+<!-- Background Gradient -->
+<div class="bg-gradient"></div>
 
-<!-- Blueprint Grid -->
-<div class="blueprint-grid"></div>
+<!-- Floating Blobs -->
+<div id="blobs"></div>
 
-<!-- Floating Books -->
-<div id="floating-books"></div>
+<!-- Floating Books/Icons -->
+<div id="floating-items"></div>
 
-<!-- Background Kid Photos -->
-<div id="bg-photos"></div>
-
-<!-- Floating Particles -->
-<div id="particles"></div>
+<!-- Photo Polaroids -->
+<div id="polaroids"></div>
 
 <!-- Splash -->
 <div id="splash">
-    <h1>BUILDRS NATION</h1>
+    <h1>Buildrs <span>Nation</span></h1>
     <p class="tagline">Building Tomorrow's Builders — Free AI Education for Every Child</p>
-    <button class="start-btn" onclick="startDemo()">&#9654;&nbsp; Watch the Story</button>
-    <div class="splash-stats">
-        <div class="stat">
-            <div class="stat-num">35K</div>
-            <div class="stat-label">Households Offline</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num">100%</div>
-            <div class="stat-label">Free</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num">K-8</div>
-            <div class="stat-label">Ages Served</div>
-        </div>
+    <button class="start-btn" onclick="startDemo()">&#9654;&nbsp; Watch Our Story</button>
+    <div class="splash-icons">
+        <span>&#x1F4DA;</span>
+        <span>&#x1F680;</span>
+        <span>&#x1F3A8;</span>
+        <span>&#x1F916;</span>
+        <span>&#x1F31F;</span>
     </div>
 </div>
 
@@ -434,47 +475,47 @@ if(sessionStorage.getItem('bn_auth')==='1'){document.getElementById('gate').styl
 
     <!-- Scene 1: The Gap -->
     <div class="scene" id="scene-the_gap">
-        <div class="scene-icon">&#x1F6A8;</div>
-        <h2>The <span class="highlight">Digital Divide</span> Is Real</h2>
-        <p>In North Minneapolis, an entire generation is being left behind. Not because they lack talent — but because they lack access.</p>
-        <div class="stat-row">
-            <div class="stat-box"><div class="num">35K</div><div class="label">No Broadband</div></div>
-            <div class="stat-box"><div class="num">1 in 4</div><div class="label">Below Poverty</div></div>
-            <div class="stat-box"><div class="num">0</div><div class="label">Free AI Programs</div></div>
+        <div class="scene-emoji">&#x1F6A8;</div>
+        <h2>The <span class="pop">Digital Divide</span> Is Real</h2>
+        <p>In North Minneapolis, an entire generation is being left behind. Not because they lack talent — because they lack access.</p>
+        <div class="bubbles">
+            <div class="bubble"><div class="num">35K</div><div class="label">No Internet</div></div>
+            <div class="bubble"><div class="num">1 in 4</div><div class="label">In Poverty</div></div>
+            <div class="bubble"><div class="num">Zero</div><div class="label">Free AI Programs</div></div>
         </div>
     </div>
 
     <!-- Scene 2: The Vision -->
     <div class="scene" id="scene-the_vision">
-        <div class="scene-icon">&#x1F4A1;</div>
-        <h2>Every Child Deserves to <span class="highlight">Shape the Future</span></h2>
-        <p>Not just inherit it. Buildrs Nation provides free AI education with zero barriers — no cost, no prerequisites, no excuses. Just potential waiting to be unlocked.</p>
+        <div class="scene-emoji">&#x2728;</div>
+        <h2>Every Kid Deserves to <span class="ocean">Shape the Future</span></h2>
+        <p>Not just inherit it. Buildrs Nation provides free AI education — no cost, no prerequisites, no excuses. Just potential waiting to be unlocked.</p>
     </div>
 
     <!-- Scene 3: The Model -->
     <div class="scene" id="scene-the_model">
-        <div class="scene-icon">&#x1F6E0;</div>
-        <h2>Children Lead. <span class="highlight">AI Assists.</span></h2>
-        <p>This isn't a coding boot camp. It's a builder's workshop. An 8-year-old designs her first app. A 12-year-old builds a game that solves a neighborhood problem. They don't consume technology — they create it.</p>
+        <div class="scene-emoji">&#x1F6E0;</div>
+        <h2>Kids Lead. <span class="sun">AI Helps.</span></h2>
+        <p>This isn't a coding camp. It's a builder's workshop. An 8-year-old designs her first app. A 12-year-old builds a game that fixes a neighborhood problem. They don't just use tech — they create it.</p>
     </div>
 
     <!-- Scene 4: The Tracks -->
     <div class="scene" id="scene-the_tracks">
-        <div class="scene-icon">&#x1F3AF;</div>
-        <h2>Three Pathways. <span class="highlight">One Mission.</span></h2>
+        <div class="scene-emoji">&#x1F3AF;</div>
+        <h2>Three Paths. <span class="purp">One Mission.</span></h2>
         <div class="tracks">
             <div class="track-card">
-                <div class="track-icon">&#x1F50D;</div>
+                <div class="track-emoji">&#x1F50D;</div>
                 <h3>Explorers</h3>
                 <div class="grades">K — 2nd Grade</div>
             </div>
             <div class="track-card">
-                <div class="track-icon">&#x1F3A8;</div>
+                <div class="track-emoji">&#x1F3A8;</div>
                 <h3>Creators</h3>
                 <div class="grades">3rd — 5th Grade</div>
             </div>
             <div class="track-card">
-                <div class="track-icon">&#x1F680;</div>
+                <div class="track-emoji">&#x1F680;</div>
                 <h3>Builders</h3>
                 <div class="grades">6th — 8th Grade</div>
             </div>
@@ -483,47 +524,47 @@ if(sessionStorage.getItem('bn_auth')==='1'){document.getElementById('gate').styl
 
     <!-- Scene 5: The Founder -->
     <div class="scene" id="scene-the_founder">
-        <div class="scene-icon">&#x1F3D7;</div>
-        <h2>Built From <span class="highlight">the Block</span></h2>
-        <div class="founder-quote">
-            "The kids on my block deserve the same shot as kids in Silicon Valley. I didn't wait for permission. I built it."
+        <div class="scene-emoji">&#x1F3D7;</div>
+        <h2>Built From <span class="pop">the Block</span></h2>
+        <div class="quote-card">
+            <p>"The kids on my block deserve the same shot as kids in Silicon Valley. I didn't wait for permission. I built it."</p>
+            <div class="author">— Craig Clay, Founder</div>
         </div>
-        <div class="founder-name">— Craig Clay, Founder & Executive Director</div>
-        <p style="margin-top:1rem;">Self-taught technologist. Father of four. Northside native.</p>
     </div>
 
     <!-- Scene 6: The Community -->
     <div class="scene" id="scene-the_community">
-        <div class="scene-icon">&#x1F91D;</div>
-        <h2>A <span class="highlight">Village</span> Behind the Vision</h2>
+        <div class="scene-emoji">&#x1F91D;</div>
+        <h2>It Takes a <span class="ocean">Village</span></h2>
         <div class="board-grid">
-            <div class="board-member"><div class="name">Shondrelle Burkhalter</div><div class="role">Marketing & Community</div></div>
-            <div class="board-member"><div class="name">Marcus "Bud" Adail</div><div class="role">Youth Programs</div></div>
-            <div class="board-member"><div class="name">Dr. R. Van Daniel</div><div class="role">Legal & Education</div></div>
-            <div class="board-member"><div class="name">Jenna Porrazzo</div><div class="role">Finance & Families</div></div>
-            <div class="board-member"><div class="name">Karl Gilleylen</div><div class="role">Community & Parks</div></div>
+            <div class="board-pill"><div class="dot"></div><span class="name">Shondrelle Burkhalter</span></div>
+            <div class="board-pill"><div class="dot"></div><span class="name">Marcus "Bud" Adail</span></div>
+            <div class="board-pill"><div class="dot"></div><span class="name">Dr. R. Van Daniel</span></div>
+            <div class="board-pill"><div class="dot"></div><span class="name">Jenna Porrazzo</span></div>
+            <div class="board-pill"><div class="dot"></div><span class="name">Karl Gilleylen</span></div>
         </div>
-        <p style="margin-top:1.5rem;">40+ years of combined service to North Minneapolis.</p>
+        <p style="margin-top:1.5rem;">40+ years serving North Minneapolis.</p>
     </div>
 
     <!-- Scene 7: The Future -->
     <div class="scene" id="scene-the_future">
-        <div class="scene-icon">&#x1F31F;</div>
-        <h2>Summer <span class="highlight">2026</span></h2>
-        <p>Forty kids. Six weeks. One question: <strong>What will you build?</strong></p>
-        <div class="stat-row">
-            <div class="stat-box"><div class="num">40</div><div class="label">Students</div></div>
-            <div class="stat-box"><div class="num">6</div><div class="label">Weeks</div></div>
-            <div class="stat-box"><div class="num">&#8734;</div><div class="label">Possibilities</div></div>
+        <div class="scene-emoji">&#x1F31F;</div>
+        <h2>Summer <span class="sun">2026</span></h2>
+        <p>Forty kids. Six weeks. One question:</p>
+        <h2 style="margin-top:0.5rem;"><span class="purp">What will you build?</span></h2>
+        <div class="bubbles">
+            <div class="bubble"><div class="num">40</div><div class="label">Students</div></div>
+            <div class="bubble"><div class="num">6</div><div class="label">Weeks</div></div>
+            <div class="bubble"><div class="num">&#8734;</div><div class="label">Possibilities</div></div>
         </div>
     </div>
 
     <!-- Scene 8: The Call -->
     <div class="scene" id="scene-the_call">
-        <div class="scene-icon">&#x1F3D7;</div>
-        <h2><span class="highlight">Buildrs Nation</span></h2>
-        <p>The next generation of builders is already here. They just need someone to hand them the tools.</p>
-        <div class="cta-actions">
+        <div class="scene-emoji">&#x1F3D7;</div>
+        <h2><span class="pop">Buildrs</span> <span class="ocean">Nation</span></h2>
+        <p>The next generation of builders is already here.<br>They just need someone to hand them the tools.</p>
+        <div class="cta-btns">
             <button class="cta-btn primary" onclick="window.open('https://buildrsnation.org','_blank')">Visit BuildrsNation.org</button>
             <button class="cta-btn secondary" onclick="window.open('https://buildrsnation.org','_blank')">Enroll / Donate</button>
         </div>
@@ -576,8 +617,6 @@ let muted = false;
 let subsVisible = true;
 let playing = false;
 
-// ── Audio (Base64 embedded or file refs) ────────────────
-// In standalone mode, window.__AUDIO_B64 will have the clips
 function getAudioSrc(sceneId) {
     if (window.__AUDIO_B64 && window.__AUDIO_B64[sceneId]) {
         return 'data:audio/mpeg;base64,' + window.__AUDIO_B64[sceneId];
@@ -585,79 +624,79 @@ function getAudioSrc(sceneId) {
     return 'audio/' + sceneId + '.mp3';
 }
 
-// ── Floating Books ─────────────────────────────────────
-function createFloatingBooks() {
-    const container = document.getElementById('floating-books');
-    const books = [
-        '\u{1F4DA}', '\u{1F4D6}', '\u{1F4D8}', '\u{1F4D7}', '\u{1F4D9}',
-        '\u{1F4BB}', '\u{1F9E0}', '\u{1F4A1}', '\u{1F680}', '\u{1F3A8}',
-        '\u{2728}', '\u{1F916}', '\u{1F4D0}', '\u{1F52C}', '\u{1F3AF}'
-    ];
-    for (let i = 0; i < 18; i++) {
-        const b = document.createElement('div');
-        b.className = 'floating-book';
-        b.textContent = books[i % books.length];
-        b.style.left = (Math.random() * 90 + 5) + '%';
-        b.style.fontSize = (1.2 + Math.random() * 1.8) + 'rem';
-        b.style.animationDelay = (Math.random() * 12) + 's';
-        b.style.animationDuration = (10 + Math.random() * 8) + 's';
-        container.appendChild(b);
+// ── Floating Blobs ─────────────────────────────────────
+function createBlobs() {
+    const container = document.getElementById('blobs');
+    const colors = ['var(--peach)', 'var(--lavender)', 'var(--mint)', 'var(--sky)'];
+    for (let i = 0; i < 6; i++) {
+        const blob = document.createElement('div');
+        blob.className = 'float-shape';
+        const size = 150 + Math.random() * 250;
+        blob.style.width = size + 'px';
+        blob.style.height = size + 'px';
+        blob.style.background = colors[i % colors.length];
+        blob.style.top = (Math.random() * 80) + '%';
+        blob.style.left = (Math.random() * 80) + '%';
+        blob.style.animationDelay = (Math.random() * 10) + 's';
+        blob.style.animationDuration = (12 + Math.random() * 8) + 's';
+        container.appendChild(blob);
     }
 }
 
-// ── Background Kid Photos ──────────────────────────────
-function createBgPhotos() {
-    const container = document.getElementById('bg-photos');
-    // Unsplash Source — free stock photos of kids learning/coding/creating
-    const photos = [
-        'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1588072432836-e10032774350?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1581726707445-75cbe4ff0c8f?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&h=300&fit=crop',
+// ── Floating Books & Icons ─────────────────────────────
+function createFloatingItems() {
+    const container = document.getElementById('floating-items');
+    const items = [
+        '\u{1F4DA}', '\u{1F4D6}', '\u{1F4D8}', '\u{1F3A8}', '\u{1F680}',
+        '\u{1F9E0}', '\u{1F4A1}', '\u{1F916}', '\u{2728}', '\u{1F52C}',
+        '\u{1F3AF}', '\u{270F}', '\u{1F4BB}', '\u{1F3B5}', '\u{1F30D}'
     ];
-    // Position photos in a subtle scattered layout
+    for (let i = 0; i < 15; i++) {
+        const el = document.createElement('div');
+        el.className = 'floating-item';
+        el.textContent = items[i % items.length];
+        el.style.left = (5 + Math.random() * 85) + '%';
+        el.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+        el.style.animationDelay = (Math.random() * 14) + 's';
+        el.style.animationDuration = (11 + Math.random() * 7) + 's';
+        container.appendChild(el);
+    }
+}
+
+// ── Photo Polaroids ────────────────────────────────────
+function createPolaroids() {
+    const container = document.getElementById('polaroids');
+    const photos = [
+        'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&h=220&fit=crop',
+        'https://images.unsplash.com/photo-1588072432836-e10032774350?w=300&h=220&fit=crop',
+        'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=300&h=220&fit=crop',
+        'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=300&h=220&fit=crop',
+        'https://images.unsplash.com/photo-1581726707445-75cbe4ff0c8f?w=300&h=220&fit=crop',
+        'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=300&h=220&fit=crop',
+    ];
     const positions = [
-        { top: '5%', left: '3%', w: 180, h: 130 },
-        { top: '10%', right: '5%', w: 160, h: 120 },
-        { top: '35%', left: '2%', w: 170, h: 125 },
-        { top: '40%', right: '3%', w: 150, h: 110 },
-        { top: '60%', left: '5%', w: 165, h: 120 },
-        { top: '65%', right: '4%', w: 175, h: 130 },
-        { top: '82%', left: '8%', w: 155, h: 115 },
-        { top: '80%', right: '6%', w: 160, h: 120 },
+        { top: '8%', left: '3%', w: 140 },
+        { top: '12%', right: '4%', w: 130 },
+        { top: '42%', left: '2%', w: 135 },
+        { top: '45%', right: '3%', w: 125 },
+        { top: '72%', left: '4%', w: 140 },
+        { top: '75%', right: '5%', w: 130 },
     ];
     photos.forEach((src, i) => {
+        const pol = document.createElement('div');
+        pol.className = 'polaroid';
+        const pos = positions[i];
+        if (pos.top) pol.style.top = pos.top;
+        if (pos.left) pol.style.left = pos.left;
+        if (pos.right) pol.style.right = pos.right;
+        pol.style.width = pos.w + 'px';
         const img = document.createElement('img');
-        img.className = 'bg-photo';
         img.src = src;
         img.loading = 'lazy';
-        const pos = positions[i % positions.length];
-        if (pos.top) img.style.top = pos.top;
-        if (pos.left) img.style.left = pos.left;
-        if (pos.right) img.style.right = pos.right;
-        img.style.width = pos.w + 'px';
-        img.style.height = pos.h + 'px';
-        img.style.animationDelay = (i * 2 + Math.random() * 3) + 's';
-        img.style.animationDuration = (14 + Math.random() * 6) + 's';
-        container.appendChild(img);
+        pol.appendChild(img);
+        pol.style.animationDelay = (i * 3 + Math.random() * 2) + 's';
+        container.appendChild(pol);
     });
-}
-
-// ── Particles ──────────────────────────────────────────
-function createParticles() {
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 30; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.animationDelay = Math.random() * 8 + 's';
-        p.style.animationDuration = (6 + Math.random() * 4) + 's';
-        container.appendChild(p);
-    }
 }
 
 // ── Demo Flow ──────────────────────────────────────────
@@ -673,31 +712,23 @@ function nextScene() {
     if (!playing) return;
     currentScene++;
     if (currentScene >= SCENES.length) {
-        // Stay on last scene
         currentScene = SCENES.length - 1;
         return;
     }
 
     const scene = SCENES[currentScene];
-
-    // Hide all scenes, show current
     document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
     const el = document.getElementById('scene-' + scene.id);
     if (el) el.classList.add('active');
 
-    // Update progress
     const progress = ((currentScene + 1) / SCENES.length) * 100;
     document.getElementById('progress-fill').style.width = progress + '%';
 
-    // Play audio
     player.src = getAudioSrc(scene.id);
     player.muted = muted;
     player.play().catch(() => {});
 
-    // Show subtitle
     showSubtitle(scene.id);
-
-    // Next scene after duration
     setTimeout(() => nextScene(), scene.duration);
 }
 
@@ -722,7 +753,6 @@ function toggleSubs() {
     if (!subsVisible) document.getElementById('subtitles').classList.remove('visible');
 }
 
-// ── Keyboard Shortcuts ─────────────────────────────────
 document.addEventListener('keydown', e => {
     if (e.key === 'm' || e.key === 'M') toggleMute();
     if (e.key === 'c' || e.key === 'C') toggleSubs();
@@ -730,9 +760,9 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Init ───────────────────────────────────────────────
-createFloatingBooks();
-createBgPhotos();
-createParticles();
+createBlobs();
+createFloatingItems();
+createPolaroids();
 </script>
 </body>
 </html>
