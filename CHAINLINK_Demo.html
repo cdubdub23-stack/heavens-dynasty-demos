@@ -408,6 +408,37 @@ html, body {
     .feed-row { grid-template-columns: 60px 70px 1fr 60px 60px; gap: 0.4rem; }
 }
 </style>
+<!-- hd-mobile-fix:start -->
+<style id="hd-mobile-fix">
+/* Heaven's Dynasty universal mobile layer — activates only <=640px, desktop untouched */
+@media (max-width: 640px) {
+  /* 1. Kill horizontal overflow at the root */
+  html, body { overflow-x: hidden !important; max-width: 100vw !important; }
+  *, *::before, *::after { box-sizing: border-box; }
+  /* 2. Cap every element to its container — neutralizes fixed px widths (760px/800px/860px) */
+  body * { max-width: 100% !important; }
+  /* 3. Media never overflows */
+  img, video, svg, canvas, iframe { height: auto !important; }
+  /* 4. Collapse multi-column grids to a single column */
+  [class*="grid"], [class*="cols"], [class*="row"], [class*="feed"],
+  .cols-2, .cols-3, .cols-4, .splash-grid, .outcome-grid {
+    grid-template-columns: 1fr !important;
+  }
+  /* 5. Wide tables scroll horizontally instead of clipping */
+  table { display: block; width: 100% !important; overflow-x: auto;
+           -webkit-overflow-scrolling: touch; }
+  /* 6. Status rails / toolbars wrap instead of running off-screen */
+  [class*="rail"], [class*="toolbar"], [class*="status"], [class*="nav"] {
+    flex-wrap: wrap !important;
+  }
+  /* 7. Comfortable scene padding + breathing room above the playback bar */
+  [class*="scene"], [class*="slide"], [class*="stage"] {
+    padding-left: 1rem !important; padding-right: 1rem !important;
+  }
+}
+</style>
+<!-- hd-mobile-fix:end -->
+
 </head>
 <body>
 
