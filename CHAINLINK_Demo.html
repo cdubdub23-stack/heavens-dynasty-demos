@@ -408,6 +408,8 @@ html, body {
     .feed-row { grid-template-columns: 60px 70px 1fr 60px 60px; gap: 0.4rem; }
 }
 </style>
+
+
 <!-- hd-mobile-fix:start -->
 <style id="hd-mobile-fix">
 /* Heaven's Dynasty universal mobile layer — activates only <=640px, desktop untouched */
@@ -434,6 +436,12 @@ html, body {
   /* 7. Comfortable scene padding + breathing room above the playback bar */
   [class*="scene"], [class*="slide"], [class*="stage"] {
     padding-left: 1rem !important; padding-right: 1rem !important;
+  }
+  /* 8. Narration caption overlay (#subtitles) covers the screen on phones —
+        hide it on mobile. Audio narration is unaffected. */
+  #subtitles, #subtitles.visible, [id*="subtitle"], [class*="subtitle"],
+  #captions, [id*="caption"]:not([class*="card"]) {
+    display: none !important;
   }
 }
 </style>

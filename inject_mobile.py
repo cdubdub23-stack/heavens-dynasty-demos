@@ -44,6 +44,12 @@ MOBILE_CSS = f"""{MARKER_START}
   [class*="scene"], [class*="slide"], [class*="stage"] {{
     padding-left: 1rem !important; padding-right: 1rem !important;
   }}
+  /* 8. Narration caption overlay (#subtitles) covers the screen on phones —
+        hide it on mobile. Audio narration is unaffected. */
+  #subtitles, #subtitles.visible, [id*="subtitle"], [class*="subtitle"],
+  #captions, [id*="caption"]:not([class*="card"]) {{
+    display: none !important;
+  }}
 }}
 </style>
 {MARKER_END}
