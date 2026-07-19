@@ -378,6 +378,8 @@ function render(){
   </div>`).join('');
 }
 window.addEventListener('load',()=>document.getElementById('pw').focus());
+function exportRatings(){const data=localStorage.getItem('hd_ratings')||'{}';const n=Object.keys(JSON.parse(data)).length;const blob=new Blob([data],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hd_ratings.json';document.body.appendChild(a);a.click();a.remove();var b=document.getElementById('expBtn');if(b)b.textContent='✓ Exported '+n+' ratings';}
 </script>
+<button id="expBtn" onclick="exportRatings()" style="position:fixed;bottom:18px;right:18px;z-index:99999;padding:10px 16px;font:600 12px/1 'Space Mono',monospace;letter-spacing:.08em;color:#0a0f1a;background:linear-gradient(180deg,#dfe9f5,#9fb4cc);border:1px solid #cfe0f2;border-radius:8px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)">&#x2b07; EXPORT RATINGS</button>
 </body>
 </html>
