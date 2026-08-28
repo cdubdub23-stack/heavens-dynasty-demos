@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>King Deazel — HEIR: King Of The North</title>
+<meta name="description" content="HEIR: King Of The North — the new album from King Deazel. Eleven tracks. The throne wasn't given. It was earned.">
+<meta name="theme-color" content="#050505">
+
+<!-- ── Open Graph / social cards ─────────────────────────────── -->
+<meta property="og:type" content="music.album">
+<meta property="og:site_name" content="King Deazel">
+<meta property="og:title" content="HEIR: King Of The North">
+<meta property="og:description" content="The throne wasn't given. It was earned. Eleven tracks from King Deazel.">
+<meta property="og:image" content="assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://kingdeazel.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HEIR: King Of The North">
+<meta name="twitter:description" content="The throne wasn't given. It was earned.">
+<meta name="twitter:image" content="assets/img/og-cover.jpg">
+
+<!-- ── Fonts: 2 families, swap, weight-subset ────────────────── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- ── Preload the LCP image (swap to real hero when delivered) ─ -->
+<link rel="preload" as="image" href="assets/img/hero-interim.jpg">
+<!-- <link rel="preload" as="image" href="assets/img/hero-vert-800.avif" type="image/avif" media="(max-width:767px)"> -->
+
+<!-- ── Structured data ───────────────────────────────────────── -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"MusicAlbum",
+  "name":"HEIR: King Of The North",
+  "byArtist":{"@type":"MusicGroup","name":"King Deazel"},
+  "numTracks":11,
+  "genre":"Hip Hop",
+  "image":"assets/img/cover-768.webp",
+  "publisher":{"@type":"Organization","name":"IDMG · Impossible Dreamz Music Group"}
+}
+</script>
+
+<style>
+/* ══════════════════════════════════════════════════════════════
+   HEIR — King Deazel
+   Black ground · gold accent · cinematic · big type
+   Breakpoints: 390 / 768 / 1280 / 1920
+   ══════════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#050505;
+  --bg-raise:#0d0d0d;
+  --surface:rgba(255,255,255,.035);
+  --line:rgba(255,255,255,.09);
+  --line-gold:rgba(212,168,83,.28);
+  --text:#f2efe9;
+  --dim:#8f8a80;
+  --gold:#d4a853;
+  --gold-bright:#e8c06a;
+  --gold-dim:rgba(212,168,83,.10);
+  --shadow:0 24px 60px rgba(0,0,0,.6);
+  --maxw:1280px;
+  --pad:clamp(20px,5vw,64px);
+}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:17px;line-height:1.65;             /* spec: 16px floor, nothing smaller */
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+h1,h2,h3,.display{font-family:'Playfair Display',Georgia,serif;font-weight:900;line-height:1.05;letter-spacing:-.015em}
+
+a{color:inherit;text-decoration:none}
+img,video{max-width:100%;display:block}
+
+:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px;border-radius:2px}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:#000;padding:12px 20px;z-index:999;font-weight:700}
+.skip:focus{left:12px;top:12px}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+
+section{padding:clamp(80px,11vw,150px) 0;position:relative}
+section + section{border-top:1px solid var(--line)}
+
+.eyebrow{
+  font-size:16px;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;margin-bottom:20px;
+  display:flex;align-items:center;gap:14px;
+}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--gold);flex:none}
+
+h2{font-size:clamp(2.1rem,5.2vw,4rem);margin-bottom:24px}
+.lede{font-size:clamp(1.05rem,1.9vw,1.3rem);color:var(--dim);max-width:62ch;line-height:1.7}
+
+/* ─── buttons ─────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  padding:17px 38px;border-radius:2px;border:1px solid var(--gold);
+  font-size:16px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  cursor:pointer;font-family:inherit;background:transparent;color:var(--gold);
+  transition:background .25s ease,color .25s ease,transform .25s ease;
+  min-height:52px;                              /* comfortable mobile tap target */
+}
+.btn:hover{background:var(--gold);color:#000}
+.btn:active{transform:translateY(1px)}
+.btn--solid{background:var(--gold);color:#000}
+.btn--solid:hover{background:var(--gold-bright);border-color:var(--gold-bright)}
+.btn--ghost{border-color:var(--line);color:var(--text)}
+.btn--ghost:hover{border-color:var(--gold);background:transparent;color:var(--gold)}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.42;cursor:not-allowed;pointer-events:none}
+
+/* ─── asset placeholder (deletes itself when real art lands) ── */
+.ph{
+  position:relative;width:100%;background:
+    repeating-linear-gradient(135deg,rgba(212,168,83,.05) 0 2px,transparent 2px 11px),
+    var(--bg-raise);
+  border:1px solid var(--line-gold);
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  color:var(--gold);padding:24px;
+}
+.ph span{font-size:16px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;opacity:.72;line-height:1.9}
+.ph small{display:block;font-size:16px;letter-spacing:.06em;color:var(--dim);text-transform:none;margin-top:6px;opacity:.85}
+
+/* ─── nav ─────────────────────────────────────────────────── */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px var(--pad);
+  background:rgba(5,5,5,0);backdrop-filter:blur(0px);
+  transition:background .35s ease,backdrop-filter .35s ease,border-color .35s ease;
+  border-bottom:1px solid transparent;
+}
+.nav.stuck{background:rgba(5,5,5,.9);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.nav__brand{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;letter-spacing:.28em;text-transform:uppercase;color:var(--text)}
+.nav__links{display:none;gap:34px}
+.nav__links a{font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+.nav__links a:hover,.nav__links a:focus-visible{color:var(--gold)}
+@media (min-width:1024px){.nav__links{display:flex}}
+
+/* ─── 01 · hero ───────────────────────────────────────────── */
+.hero{
+  min-height:100svh;display:grid;align-items:end;
+  padding:0 0 clamp(56px,9vw,110px);border-top:0;
+  position:relative;overflow:hidden;
+}
+.hero__media{position:absolute;inset:0;z-index:0}
+.hero__media img,.hero__media video{width:100%;height:100%;object-fit:cover}
+.hero__media .ph{height:100%;border:0}
+.hero__scrim{
+  position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.82) 0%,rgba(5,5,5,.25) 34%,rgba(5,5,5,.55) 68%,rgba(5,5,5,.96) 100%),
+    radial-gradient(ellipse 90% 60% at 50% 0%,rgba(212,168,83,.10),transparent 62%);
+}
+.hero__inner{position:relative;z-index:2;width:100%}
+.hero__artist{font-size:16px;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:500}
+.hero h1{font-size:clamp(2.9rem,9vw,7.4rem);margin-bottom:26px;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--gold);display:block}
+.hero__quote{
+  font-family:'Playfair Display',serif;font-style:italic;font-weight:700;
+  font-size:clamp(1.15rem,2.7vw,1.85rem);color:var(--text);opacity:.92;
+  max-width:22ch;line-height:1.35;margin-bottom:42px;
+}
+.hero__cta{display:flex;flex-wrap:wrap;gap:16px}
+.hero__meta{
+  margin-top:44px;padding-top:26px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:clamp(24px,5vw,64px);
+}
+.hero__meta div{font-size:16px}
+.hero__meta dt{color:var(--dim);letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px}
+.hero__meta dd{font-weight:700;letter-spacing:.05em}
+
+/* ─── 02 · album ──────────────────────────────────────────── */
+.album__grid{display:grid;gap:clamp(36px,6vw,72px);grid-template-columns:1fr;align-items:start}
+@media (min-width:900px){.album__grid{grid-template-columns:minmax(300px,440px) 1fr}}
+.cover{aspect-ratio:1;box-shadow:var(--shadow);position:sticky;top:96px}
+@media (max-width:899px){.cover{position:static}}
+.cover .ph{height:100%;aspect-ratio:1}
+
+.notice{
+  border-left:3px solid var(--gold);background:var(--gold-dim);
+  padding:20px 24px;margin-bottom:34px;font-size:16px;line-height:1.65;
+}
+.notice strong{display:block;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;font-size:16px}
+
+.tracks{list-style:none;border-top:1px solid var(--line)}
+.track{
+  display:grid;grid-template-columns:44px 1fr auto;gap:16px;align-items:center;
+  padding:17px 4px;border-bottom:1px solid var(--line);transition:background .2s;
+}
+.track:hover{background:var(--surface)}
+.track__n{font-size:16px;color:var(--dim);font-variant-numeric:tabular-nums}
+.track__title{font-weight:500;font-size:17px}
+.track__title[data-pending]{color:var(--dim);font-style:italic}
+.track__tags{display:flex;align-items:center;gap:10px}
+.tag{font-size:16px;letter-spacing:.12em;color:var(--dim);border:1px solid var(--line);padding:2px 8px;border-radius:2px;line-height:1.5}
+.tag--e{color:var(--gold);border-color:var(--line-gold)}
+.track__play{
+  width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+  background:transparent;color:var(--text);cursor:pointer;flex:none;
+  display:grid;place-items:center;transition:border-color .2s,color .2s;
+}
+.track__play:hover:not([disabled]){border-color:var(--gold);color:var(--gold)}
+.track__play[disabled]{opacity:.3;cursor:not-allowed}
+
+/* ─── 03 · exclusive access ───────────────────────────────── */
+.tiers{display:grid;gap:24px;grid-template-columns:1fr;margin-top:48px}
+@media (min-width:768px){.tiers{grid-template-columns:1fr 1fr}}
+.tier{border:1px solid var(--line);padding:clamp(28px,4vw,44px);display:flex;flex-direction:column;background:var(--surface)}
+.tier--feature{border-color:var(--line-gold);background:linear-gradient(180deg,var(--gold-dim),transparent 60%)}
+.tier__name{font-size:16px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:500}
+.tier__price{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,3.4rem);font-weight:900;margin-bottom:6px}
+.tier__price[data-tbd]{color:var(--dim);font-size:clamp(1.3rem,3vw,1.7rem);font-style:italic}
+.tier__note{font-size:16px;color:var(--dim);margin-bottom:26px}
+.tier ul{list-style:none;margin-bottom:32px;flex:1}
+.tier li{padding:11px 0 11px 28px;position:relative;border-bottom:1px solid var(--line);font-size:16px}
+.tier li:last-child{border-bottom:0}
+.tier li::before{content:"";position:absolute;left:4px;top:19px;width:9px;height:9px;border:1px solid var(--gold);transform:rotate(45deg)}
+
+/* ─── 04 · bio ────────────────────────────────────────────── */
+.bio__grid{display:grid;gap:clamp(36px,6vw,72px);grid-template-columns:1fr}
+@media (min-width:900px){.bio__grid{grid-template-columns:minmax(280px,380px) 1fr}}
+.portrait{aspect-ratio:4/5}
+.portrait .ph{height:100%}
+.bio__body p{margin-bottom:22px;max-width:62ch}
+.bio__body p:last-child{margin-bottom:0}
+
+/* ─── 05 · visuals ────────────────────────────────────────── */
+.gallery{display:grid;gap:14px;grid-template-columns:repeat(2,1fr);margin-top:48px}
+@media (min-width:768px){.gallery{grid-template-columns:repeat(3,1fr);gap:18px}}
+.gallery figure{position:relative;overflow:hidden;background:var(--bg-raise)}
+.gallery .ph{aspect-ratio:4/5}
+.gallery--tall{grid-row:span 2}
+.gallery--tall .ph{aspect-ratio:4/5;height:100%}
+
+/* ─── 06 · videos ─────────────────────────────────────────── */
+.videos{display:grid;gap:24px;grid-template-columns:1fr;margin-top:48px}
+@media (min-width:768px){.videos{grid-template-columns:repeat(2,1fr)}}
+.vid figcaption{padding-top:14px;font-size:16px;color:var(--dim);letter-spacing:.08em}
+.vid .ph{aspect-ratio:16/9}
+.vid--vertical .ph{aspect-ratio:4/5;max-width:420px}
+
+/* ─── 07 · shop ───────────────────────────────────────────── */
+.shop{display:grid;gap:24px;grid-template-columns:repeat(2,1fr);margin-top:48px}
+@media (min-width:768px){.shop{grid-template-columns:repeat(4,1fr)}}
+.product .ph{aspect-ratio:1}
+.product h3{font-family:'Inter',sans-serif;font-weight:700;font-size:16px;letter-spacing:.12em;text-transform:uppercase;margin:16px 0 5px}
+.product p{font-size:16px;color:var(--dim)}
+
+/* ─── footer ──────────────────────────────────────────────── */
+.footer{border-top:1px solid var(--line);padding:clamp(72px,9vw,120px) 0 48px;background:var(--bg-raise)}
+.footer h2{font-size:clamp(1.8rem,4.4vw,3rem)}
+.capture{display:flex;flex-wrap:wrap;gap:12px;margin:32px 0 12px;max-width:620px}
+.capture input[type=email]{
+  flex:1 1 260px;min-width:0;background:transparent;border:1px solid var(--line);
+  color:var(--text);padding:16px 20px;font-size:17px;font-family:inherit;border-radius:2px;min-height:52px;
+}
+.capture input[type=email]::placeholder{color:var(--dim)}
+.capture input[type=email]:focus{border-color:var(--gold);outline:none}
+.capture .btn{flex:0 0 auto}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-msg{font-size:16px;min-height:1.6em;color:var(--gold)}
+.form-msg[data-state=error]{color:#e2685f}
+.social{display:flex;flex-wrap:wrap;gap:28px;margin:44px 0 34px}
+.social a{font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+.social a:hover{color:var(--gold)}
+.colophon{display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:space-between;padding-top:28px;border-top:1px solid var(--line);font-size:16px;color:var(--dim)}
+
+/* ─── scroll reveal (opt-out under reduced motion) ────────── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top">King Deazel</a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#album">The Album</a>
+    <a href="#access">Exclusive</a>
+    <a href="#artist">The King</a>
+    <a href="#visuals">Visuals</a>
+    <a href="#videos">Videos</a>
+    <a href="#shop">BOATS</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ═══ 01 · HERO ═══════════════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero__media">
+    <!-- Swap this block for the real art-directed <picture> when photography lands:
+    <picture>
+      <source media="(max-width:767px)" type="image/avif"
+              srcset="assets/img/hero-vert-800.avif 800w, assets/img/hero-vert-1440.avif 1440w" sizes="100vw">
+      <source media="(max-width:767px)" type="image/webp"
+              srcset="assets/img/hero-vert-800.webp 800w, assets/img/hero-vert-1440.webp 1440w" sizes="100vw">
+      <source type="image/avif"
+              srcset="assets/img/hero-1280.avif 1280w, assets/img/hero-1920.avif 1920w, assets/img/hero-2560.avif 2560w" sizes="100vw">
+      <source type="image/webp"
+              srcset="assets/img/hero-1280.webp 1280w, assets/img/hero-1920.webp 1920w, assets/img/hero-2560.webp 2560w" sizes="100vw">
+      <img src="assets/img/hero-1920.jpg" alt="King Deazel photographed for HEIR: King Of The North" fetchpriority="high" decoding="async" width="1920" height="1080">
+    </picture> -->
+    <img src="assets/img/hero-interim.jpg" alt="" aria-hidden="true" fetchpriority="high" decoding="async" width="1920" height="1080">
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <div class="wrap">
+      <p class="hero__artist">King Deazel</p>
+      <h1>HEIR<em>King Of The North</em></h1>
+      <p class="hero__quote">&ldquo;The throne wasn&rsquo;t given. It was earned.&rdquo;</p>
+      <div class="hero__cta">
+        <a class="btn btn--solid" href="#access">Buy / Listen</a>
+        <a class="btn btn--ghost" href="#videos">Watch Trailer</a>
+      </div>
+      <dl class="hero__meta">
+        <div><dt>Tracks</dt><dd>11</dd></div>
+        <div><dt>Runtime</dt><dd>33:12.5</dd></div>
+        <div><dt>Masters</dt><dd>24-bit / 48 kHz</dd></div>
+        <div><dt>Label</dt><dd>IDMG</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 02 · THE ALBUM ══════════════════════════════════════ -->
+<section id="album">
+  <div class="wrap">
+    <p class="eyebrow reveal">01 · The Album</p>
+    <h2 class="reveal">Eleven tracks.<br>No clean versions.</h2>
+    <p class="lede reveal">Mastered as a set at 24-bit / 48 kHz, levelled across a 3.3 dB spread. Heard the way it was sequenced to be heard.</p>
+
+    <div class="notice" style="margin-top:34px">
+      <strong>Build note — interim artwork</strong>
+      The cover and hero backdrop are both pulled from the 768&nbsp;px trailer, not the finished 4000&nbsp;×&nbsp;4000 master. They are stand-ins so the layout can be judged — send the master and both get replaced at full sharpness. The hero also needs real photography with <em>no baked-in type</em>; the artwork carries its own title treatment, which is why it&rsquo;s blurred back here.
+    </div>
+
+    <div class="album__grid" style="margin-top:56px">
+      <div class="cover reveal">
+        <picture>
+          <source type="image/webp" srcset="assets/img/cover-600.webp 600w, assets/img/cover-768.webp 768w" sizes="(min-width:900px) 440px, 90vw">
+          <img src="assets/img/cover-768.jpg" alt="HEIR: King Of The North — King Deazel crowned before an army beneath JBM banners" width="768" height="768" loading="lazy" decoding="async">
+        </picture>
+      </div>
+
+      <div class="reveal">
+        <div class="notice" id="seq-notice" hidden>
+          <strong>Sequence pending sign-off</strong>
+          Track order is not confirmed. Titles below are placeholders and nothing here should be published or shared until IDMG signs off on the v2 re-sequence.
+        </div>
+        <ol class="tracks" id="tracks" aria-label="Album tracklist"></ol>
+        <p style="margin-top:22px;font-size:16px;color:var(--dim)" id="track-foot"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 03 · EXCLUSIVE ACCESS ═══════════════════════════════ -->
+<section id="access">
+  <div class="wrap">
+    <p class="eyebrow reveal">02 · Exclusive Access</p>
+    <h2 class="reveal">Own it. Don&rsquo;t rent it.</h2>
+    <p class="lede reveal">Streaming pays fractions of a cent and gives you nothing to keep. Here you get the masters as they were finished — and the things that never touch a streaming service.</p>
+
+    <div class="tiers">
+      <div class="tier reveal">
+        <p class="tier__name">Digital Album</p>
+        <p class="tier__price" data-tbd>Price TBD</p>
+        <p class="tier__note">Instant download after purchase</p>
+        <ul>
+          <li>All 11 tracks · MP3 320 kbps</li>
+          <li>24-bit / 48 kHz WAV masters</li>
+          <li>Full-resolution cover art</li>
+          <li>Digital liner notes</li>
+        </ul>
+        <button class="btn" aria-disabled="true" data-buy="digital">Payment Not Wired</button>
+      </div>
+
+      <div class="tier tier--feature reveal">
+        <p class="tier__name">Deluxe Package</p>
+        <p class="tier__price" data-tbd>Price TBD</p>
+        <p class="tier__note">Limited — confirm inventory before launch</p>
+        <ul>
+          <li>Everything in Digital Album</li>
+          <li>BOATS merch item</li>
+          <li>Signed physical component</li>
+          <li>Early access to visuals</li>
+        </ul>
+        <button class="btn btn--solid" aria-disabled="true" data-buy="deluxe">Payment Not Wired</button>
+      </div>
+    </div>
+
+    <div class="notice" style="margin-top:40px">
+      <strong>Build note — not for the live site</strong>
+      Checkout is deliberately inert. Wiring it needs four answers: processor (Stripe Checkout recommended), price points, secure-download delivery for ~400&nbsp;MB of WAV per customer (expiring signed URLs + per-purchase download caps), and licence terms on the paid download. Delete this box once commerce is live.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 04 · KING DEAZEL ════════════════════════════════════ -->
+<section id="artist">
+  <div class="wrap">
+    <p class="eyebrow reveal">03 · King Deazel</p>
+    <div class="bio__grid" style="margin-top:16px">
+      <div class="portrait reveal">
+        <div class="ph" role="img" aria-label="Portrait pending delivery">
+          <span>Portrait<small>2400 px long edge · sRGB<br>One frame, from the album shoot</small></span>
+        </div>
+      </div>
+      <div class="bio__body reveal">
+        <h2>From Chicago to the throne.</h2>
+        <p style="color:var(--dim)"><em>Bio copy pending from Deazel — 150&ndash;250 words. The arc the spec calls for: Chicago roots &rarr; BOATS &rarr; the independent grind &rarr; acting and business &rarr; HEIR. Replace this paragraph and the two below.</em></p>
+        <p style="color:var(--dim)"><em>Paragraph two — the grind. What it cost, what got built, who was there.</em></p>
+        <p style="color:var(--dim)"><em>Paragraph three — HEIR. Why this album, why now, why the title.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 05 · VISUALS ════════════════════════════════════════ -->
+<section id="visuals">
+  <div class="wrap">
+    <p class="eyebrow reveal">04 · Visuals</p>
+    <h2 class="reveal">The world of HEIR.</h2>
+    <p class="lede reveal">Album shoot, Chicago, the studio, the stage. Six to ten frames — quality over volume, a few in black and white.</p>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<!-- ═══ 06 · VIDEOS ═════════════════════════════════════════ -->
+<section id="videos">
+  <div class="wrap">
+    <p class="eyebrow reveal">05 · Videos</p>
+    <h2 class="reveal">Watch it.</h2>
+    <p class="lede reveal">Trailer, motion pieces, behind the scenes.</p>
+
+    <div class="videos">
+      <figure class="vid vid--vertical reveal">
+        <video controls preload="none" playsinline
+               poster="assets/video/trailer-poster.jpg"
+               width="768" height="960"
+               aria-label="HEIR: King Of The North — album trailer">
+          <source src="assets/video/trailer.mp4" type="video/mp4">
+          Your browser can’t play this video. <a href="assets/video/trailer.mp4">Download the trailer</a>.
+        </video>
+        <figcaption>Album trailer · 2:26 · 4:5 vertical</figcaption>
+      </figure>
+      <figure class="vid reveal">
+        <div class="ph" role="img" aria-label="Music video pending"><span>Music Video<small>1920 × 1080 · H.264 High · AAC 192k<br>Poster frame required — never load black</small></span></div>
+        <figcaption>Music video · pending</figcaption>
+      </figure>
+    </div>
+
+    <div class="notice" style="margin-top:40px">
+      <strong>Build note — vertical by design</strong>
+      The trailer is natively 768 × 960 (4:5), so it&rsquo;s framed vertical here — the only option that loses no picture. It is <em>not</em> stretched or cropped. Set to <code>preload="none"</code> with a poster frame, so the 38 MB file costs nothing until someone presses play. Landscape music videos will sit beside it in the 16:9 slot.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 07 · BOATS SHOP ═════════════════════════════════════ -->
+<section id="shop">
+  <div class="wrap">
+    <p class="eyebrow reveal">06 · BOATS</p>
+    <h2 class="reveal">Wear the story.</h2>
+    <p class="lede reveal">Inside the album&rsquo;s world, not beside it.</p>
+    <div class="shop" id="shop-grid"></div>
+    <p style="margin-top:34px;font-size:16px;color:var(--dim)">Product photography must share one background and one lighting setup across every item, or this section falls apart visually.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <p class="eyebrow">Join the Kingdom</p>
+    <h2>Before everybody else.</h2>
+    <p class="lede">Exclusive music, drops, videos and announcements — first.</p>
+
+    <form class="capture" id="capture" novalidate>
+      <label class="hp" for="company">Leave this field empty</label>
+      <input class="hp" type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+      <label class="hp" for="email">Email address</label>
+      <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email" inputmode="email">
+      <button class="btn btn--solid" type="submit">Join</button>
+    </form>
+    <p class="form-msg" id="capture-msg" role="status" aria-live="polite"></p>
+
+    <nav class="social" aria-label="Social">
+      <a href="#" rel="noopener">Instagram</a>
+      <a href="#" rel="noopener">YouTube</a>
+      <a href="#" rel="noopener">TikTok</a>
+      <a href="mailto:">Email</a>
+    </nav>
+
+    <div class="colophon">
+      <span>&copy; <span id="yr"></span> King Deazel · IDMG — Impossible Dreamz Music Group</span>
+      <span>All tracks explicit · No clean versions exist</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── analytics hook: swap the body for your provider ─────── */
+  function track(event, props){
+    (window.dataLayer = window.dataLayer || []).push(Object.assign({event:event}, props||{}));
+  }
+
+  /* ── nav background on scroll ────────────────────────────── */
+  var nav = document.getElementById('nav');
+  var onScroll = function(){ nav.classList.toggle('stuck', window.scrollY > 40); };
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  /* ── scroll reveal ───────────────────────────────────────── */
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduced && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ── placeholder grids ───────────────────────────────────── */
+  function ph(label, note, cls){
+    var f = document.createElement('figure');
+    if(cls) f.className = cls;
+    f.innerHTML = '<div class="ph" role="img" aria-label="'+label+' pending delivery">'+
+                  '<span>'+label+'<small>'+note+'</small></span></div>';
+    return f;
+  }
+  var gallery = document.getElementById('gallery');
+  for(var g=1; g<=6; g++){
+    gallery.appendChild(ph('Frame '+g, '2400 px long edge · sRGB'+(g===2||g===5?' · B&amp;W':''), g===1?'gallery--tall':''));
+  }
+  var shopItems = [['Tee','2000 px square'],['Hoodie','2000 px square'],['Hat','2000 px square'],['Chain','2000 px square']];
+  var shopGrid = document.getElementById('shop-grid');
+  shopItems.forEach(function(item){
+    var f = ph(item[0], item[1], 'product');
+    f.insertAdjacentHTML('beforeend','<h3>'+item[0]+'</h3><p>Price TBD</p>');
+    shopGrid.appendChild(f);
+  });
+
+  /* ── tracklist from data/tracklist.json ──────────────────── */
+  var list = document.getElementById('tracks'),
+      notice = document.getElementById('seq-notice'),
+      foot = document.getElementById('track-foot');
+
+  function renderTracks(d){
+    if(!d.confirmed) notice.hidden = false;
+    list.innerHTML = '';
+    d.tracks.forEach(function(t){
+      var li = document.createElement('li');
+      li.className = 'track';
+      var pending = !t.title;
+      var playable = !!t.preview;
+      li.innerHTML =
+        '<span class="track__n">'+String(t.n).padStart(2,'0')+'</span>'+
+        '<span class="track__title"'+(pending?' data-pending':'')+'>'+
+          (pending ? 'Title pending' : t.title)+'</span>'+
+        '<span class="track__tags">'+
+          (t.duration ? '<span class="tag">'+t.duration+'</span>' : '')+
+          (d.explicitAll ? '<span class="tag tag--e">E</span>' : '')+
+          '<button class="track__play" '+(playable?'':'disabled')+
+            ' aria-label="Play preview of '+(pending?'track '+t.n:t.title)+'">&#9654;</button>'+
+        '</span>';
+      if(playable){
+        li.querySelector('.track__play').addEventListener('click', function(){
+          track('preview_play', {track:t.n, title:t.title});
+          /* audio wiring goes here once preview MP3s exist */
+        });
+      }
+      list.appendChild(li);
+    });
+    foot.textContent = d.tracks.length + ' tracks · ' + d.totalRuntime +
+      ' · previews ' + d.previewSeconds + 's · all explicit';
+  }
+
+  fetch('data/tracklist.json')
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .then(renderTracks)
+    .catch(function(){
+      notice.hidden = false;
+      foot.textContent = 'Tracklist could not load — check data/tracklist.json.';
+    });
+
+  /* ── email capture ───────────────────────────────────────── */
+  var form = document.getElementById('capture'), msg = document.getElementById('capture-msg');
+  var ENDPOINT = '';   // ← set to your ESP endpoint (Mailchimp / ConvertKit / Buttondown)
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(document.getElementById('company').value) return;          // honeypot
+    var email = document.getElementById('email').value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+      msg.dataset.state = 'error'; msg.textContent = 'That email doesn’t look right.'; return;
+    }
+    if(!ENDPOINT){
+      msg.dataset.state = 'error';
+      msg.textContent = 'Mailing list not connected yet — set ENDPOINT in index.html.';
+      return;
+    }
+    msg.removeAttribute('data-state'); msg.textContent = 'Joining…';
+    fetch(ENDPOINT, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email:email})
+    })
+    .then(function(r){ if(!r.ok) throw 0;
+      msg.textContent = 'You’re in. Watch your inbox.'; form.reset(); track('signup', {}); })
+    .catch(function(){
+      msg.dataset.state = 'error'; msg.textContent = 'Something went wrong. Try again.'; });
+  });
+
+  /* ── buy buttons: inert until commerce is wired ──────────── */
+  document.querySelectorAll('[data-buy]').forEach(function(b){
+    b.addEventListener('click', function(){ track('buy_click', {tier:b.dataset.buy}); });
+  });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

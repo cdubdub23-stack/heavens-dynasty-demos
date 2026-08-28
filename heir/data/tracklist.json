@@ -1,0 +1,77 @@
+{
+    "_comment": "Sequence taken from IDMG's delivered master files (01\u201311, idmgatl@gmail.com, 2026-08-27). NOTE: the build spec described 'Take A Break' at position 7; the delivered files place it at 8 with 'Hallelujah' at 7. Files win. Durations still needed \u2014 fill `duration` per track. `preview` paths activate the play buttons once 45s MP3s are cut.",
+    "album": "HEIR: King Of The North",
+    "artist": "King Deazel",
+    "confirmed": true,
+    "totalRuntime": "33:12.5",
+    "explicitAll": true,
+    "previewSeconds": 45,
+    "tracks": [
+        {
+            "n": 1,
+            "title": "Say My Name",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 2,
+            "title": "I Been",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 3,
+            "title": "Biggest",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 4,
+            "title": "Repeat After Me",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 5,
+            "title": "Party At The Palace",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 6,
+            "title": "Vito",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 7,
+            "title": "Hallelujah",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 8,
+            "title": "Take A Break",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 9,
+            "title": "Faded Out",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 10,
+            "title": "Thing For You",
+            "duration": "",
+            "preview": ""
+        },
+        {
+            "n": 11,
+            "title": "Keep Rising",
+            "duration": "",
+            "preview": ""
+        }
+    ]
+}
