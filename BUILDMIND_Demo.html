@@ -377,6 +377,25 @@ window.__AUDIO_B64 = {
   }
 }
 </style>
+<style id="bm-phone-fit">
+@media (max-width: 640px), (max-height: 500px) and (orientation: landscape) {
+  .scene-content { flex: none !important; overflow: visible !important; padding: 16px 18px 90px !important; }
+  .scene-header { margin-bottom: 16px; }
+  .nav-dots { display: none !important; }   /* the play bar shows the slide count */
+}
+@media (max-width: 640px) {
+  .silo-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; margin-top: 12px; }
+  .silo-card { padding: 14px 10px !important; }  .silo-icon { font-size: 26px; margin-bottom: 6px; }
+  .cost-stat { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; margin-top: 12px; }
+  .cost-stat > * { padding: 12px 6px !important; }  .cost-value { font-size: 1.3rem; }
+  .cost-label { font-size: 0.6rem; letter-spacing: 0.5px; }
+  .gap-doc-row { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 8px !important; margin-bottom: 12px; }
+  .gap-doc { padding: 12px !important; }  .gap-doc-icon { font-size: 22px; margin-bottom: 4px; }
+  .query-text { white-space: nowrap !important; text-overflow: ellipsis; }
+  .cta-logo { font-size: 12.5vw !important; padding: 0 0.12em; letter-spacing: -0.5px; }
+  .cta-btn { padding: 14px 18px !important; }
+}
+</style>
 <script id="hd-mobile-fit">
 /* Auto-fit: scale each visible scene so it fits the phone screen (both axes).
    Mobile only (<=640px). Never scales up. Re-runs on resize + scene change. */
@@ -394,20 +413,30 @@ window.__AUDIO_B64 = {
   }
   function fit(){
     var wrap = document.querySelectorAll('[data-hdfit]');
-    if (window.innerWidth > MAX_W){ // desktop: undo everything
+    if (window.innerWidth > MAX_W && window.innerHeight > 500){ // desktop: undo everything (sideways phones are short, so they still fit)
       [].forEach.call(wrap, function(el){ el.style.transform=''; el.style.transformOrigin='';
         el.removeAttribute('data-hdfit'); });
       return;
     }
+    var scaled = [], H = window.innerHeight, reserve = H <= 500 ? 100 : BAR;
+    var pc = document.getElementById('playback-ctrl');
+    if (pc && getComputedStyle(pc).display !== 'none'){       // keep clear of the play controls
+      var pr = pc.getBoundingClientRect();
+      if (pr.height && pr.top > H * 0.5) reserve = Math.max(reserve, H - pr.top + 8);
+    }
     activeScenes().forEach(function(s){
+      if (scaled.some(function(a){ return a.contains(s); })){   // inside a slide already shrunk: don't shrink twice
+        s.style.transform = ''; s.removeAttribute('data-hdfit'); return; }
       s.style.transform = 'none';                 // measure natural size
       s.style.transformOrigin = 'top center';
       var w = s.scrollWidth, h = s.scrollHeight;
       if (!w || !h) return;
-      var scale = Math.min(1, window.innerWidth / w, (window.innerHeight - BAR) / h);
+      var top = Math.min(Math.max(0, s.getBoundingClientRect().top), H * 0.3);   // e.g. below an app top bar
+      var scale = Math.min(1, window.innerWidth / w, (H - top - reserve) / h);
       if (scale < 0.992){
         s.style.transform = 'scale(' + scale.toFixed(4) + ')';
         s.setAttribute('data-hdfit','1');
+        scaled.push(s);
       } else {
         s.style.transform = '';
         s.removeAttribute('data-hdfit');
