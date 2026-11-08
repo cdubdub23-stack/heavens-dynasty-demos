@@ -1061,7 +1061,7 @@ function animateQuery() {
                 if (el.classList && el.classList.contains('active') &&
                     (el.classList.contains('scene') || el.id.startsWith('scene'))) {
                     // Figure out which scene index this is
-                    var allScenes = document.querySelectorAll('.scene, [id^="scene-"]');
+                    var allScenes = Array.from(document.querySelectorAll('.scene, [id^="scene-"]')); allScenes = allScenes.filter(function(s){ return !/^(AUDIO|VIDEO|SOURCE)$/.test(s.tagName) && !allScenes.some(function(o){ return o !== s && o.contains(s); }); }); // whole slides only, so the count can't pass the total
                     allScenes.forEach(function(s, i) {
                         if (s === el) pbCurrentScene = i;
                     });

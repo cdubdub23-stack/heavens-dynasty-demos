@@ -699,6 +699,33 @@
   }
 }
 </style>
+<style id="hd-safe-center">
+/* Phones: center slides without letting a tall slide spill off the top (the fit script can only shrink what it can measure) */
+@media (max-width: 640px), (max-height: 500px) and (orientation: landscape) {
+  .scene { flex-direction: column !important; justify-content: flex-start !important; align-items: center !important; }
+  .scene > * { flex-shrink: 0 !important; max-width: 100%; }
+  .scene > :first-child { margin-top: auto !important; }
+  .scene > :last-child { margin-bottom: auto !important; }
+  #controls { display: none !important; }   /* the shared play bar replaces this demo's own bottom bar */
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .scene { padding: 20px 28px !important; }
+}
+</style>
+<style id="hd-table-phone">
+/* Phones: the score table keeps its numbers and badges on one line (they were breaking a letter per line) */
+@media (max-width: 640px) {
+  .comparison-table th:nth-child(5), .comparison-table td:nth-child(5) { display: none !important; }
+  .comparison-table th, .comparison-table td { overflow-wrap: normal !important; word-break: normal !important; padding: 8px 5px !important; font-size: 0.68rem !important; }
+  .comparison-table { display: table !important; table-layout: fixed !important; width: 100% !important; }
+  .comparison-table th:nth-child(1) { width: 25%; } .comparison-table th:nth-child(2) { width: 15%; }
+  .comparison-table th:nth-child(3) { width: 31%; } .comparison-table th:nth-child(4) { width: 29%; }
+  .comparison-table th { letter-spacing: 0 !important; font-size: 0.56rem !important; }
+  .comparison-table .risk-badge { font-size: 0.58rem !important; padding: 3px 4px !important; letter-spacing: 0.2px !important; }
+  .comparison-table td:nth-child(4) { overflow-wrap: anywhere !important; }
+  .comparison-table .score-badge, .comparison-table .risk-badge, .comparison-table [class*="badge"] { white-space: nowrap !important; font-size: 0.66rem !important; padding: 3px 6px !important; }
+}
+</style>
 <script id="hd-mobile-fit">
 /* Auto-fit: scale each visible scene so it fits the phone screen (both axes).
    Mobile only (<=640px). Never scales up. Re-runs on resize + scene change. */
@@ -716,20 +743,30 @@
   }
   function fit(){
     var wrap = document.querySelectorAll('[data-hdfit]');
-    if (window.innerWidth > MAX_W){ // desktop: undo everything
+    if (window.innerWidth > MAX_W && window.innerHeight > 500){ // desktop: undo everything (sideways phones are short, so they still fit)
       [].forEach.call(wrap, function(el){ el.style.transform=''; el.style.transformOrigin='';
         el.removeAttribute('data-hdfit'); });
       return;
     }
+    var scaled = [], H = window.innerHeight, reserve = H <= 500 ? 100 : BAR;
+    var pc = document.getElementById('playback-ctrl');
+    if (pc && getComputedStyle(pc).display !== 'none'){       // keep clear of the play controls
+      var pr = pc.getBoundingClientRect();
+      if (pr.height && pr.top > H * 0.5) reserve = Math.max(reserve, H - pr.top + 8);
+    }
     activeScenes().forEach(function(s){
+      if (scaled.some(function(a){ return a.contains(s); })){   // inside a slide already shrunk: don't shrink twice
+        s.style.transform = ''; s.removeAttribute('data-hdfit'); return; }
       s.style.transform = 'none';                 // measure natural size
       s.style.transformOrigin = 'top center';
       var w = s.scrollWidth, h = s.scrollHeight;
       if (!w || !h) return;
-      var scale = Math.min(1, window.innerWidth / w, (window.innerHeight - BAR) / h);
+      var top = Math.min(Math.max(0, s.getBoundingClientRect().top), H * 0.3);   // e.g. below an app top bar
+      var scale = Math.min(1, window.innerWidth / w, (H - top - reserve) / h);
       if (scale < 0.992){
         s.style.transform = 'scale(' + scale.toFixed(4) + ')';
         s.setAttribute('data-hdfit','1');
+        scaled.push(s);
       } else {
         s.style.transform = '';
         s.removeAttribute('data-hdfit');
@@ -1325,7 +1362,7 @@
                 if (el.classList && el.classList.contains('active') &&
                     (el.classList.contains('scene') || el.id.startsWith('scene'))) {
                     // Figure out which scene index this is
-                    var allScenes = document.querySelectorAll('.scene, [id^="scene-"]');
+                    var allScenes = Array.from(document.querySelectorAll('.scene, [id^="scene-"]')); allScenes = allScenes.filter(function(s){ return !/^(AUDIO|VIDEO|SOURCE)$/.test(s.tagName) && !allScenes.some(function(o){ return o !== s && o.contains(s); }); }); // whole slides only, so the count can't pass the total
                     allScenes.forEach(function(s, i) {
                         if (s === el) pbCurrentScene = i;
                     });
